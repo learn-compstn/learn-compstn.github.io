@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeaRN-CompSTN · CVPR 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #FFFFFF;
+  --surf:      #F6F7FB;
+  --surf2:     #ECEEF6;
+  --border:    #DDE0EE;
+  --border2:   #C8CCDF;
+  --ink:       #0C1023;
+  --ink2:      #3D4663;
+  --ink3:      #8892AA;
+  --green:     #0A6E66;
+  --green-lt:  #D1FAF0;
+  --green-mid: #0D9488;
+  --amber:     #A85D00;
+  --amber-lt:  #FEF3C7;
+  --red:       #C53030;
+  --purple:    #5B3FBF;
+  --purple-lt: #EDE9FF;
+  --shadow-s:  0 1px 3px rgba(12,16,35,.07), 0 4px 12px rgba(12,16,35,.04);
+  --shadow-m:  0 4px 16px rgba(12,16,35,.08), 0 1px 3px rgba(12,16,35,.05);
+  --shadow-l:  0 12px 40px rgba(12,16,35,.12), 0 2px 8px rgba(12,16,35,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--ink);font-family:'Lora',Georgia,serif;font-weight:400;line-height:1.75;overflow-x:hidden}
+::selection{background:rgba(10,110,102,.15);color:var(--green)}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:.85rem 3rem;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Fraunces',serif;font-size:1rem;font-weight:700;
+  color:var(--ink);text-decoration:none;letter-spacing:.01em;
+}
+.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2.2rem;list-style:none;align-items:center}
+.nav-links a{
+  color:var(--ink2);text-decoration:none;
+  font-family:'Outfit',sans-serif;font-size:.78rem;font-weight:500;
+  letter-spacing:.04em;transition:color .18s;
+}
+.nav-links a:hover{color:var(--green)}
+.nav-cta{
+  padding:.4rem 1.1rem;border-radius:5px;
+  background:var(--ink);color:#fff!important;font-size:.76rem!important;
+  transition:background .18s!important;
+}
+.nav-cta:hover{background:var(--green)!important}
+
+/* ── HERO ── */
+#hero{
+  position:relative;min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  overflow:hidden;padding-top:64px;
+}
+#hero-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;opacity:.6;
+}
+.hero-left{
+  position:relative;z-index:2;
+  padding:8rem 4rem 6rem;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.hero-right{
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+  padding:6rem 3rem 6rem 1rem;
+}
+.conference-pill{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.3rem .9rem;border-radius:99px;
+  border:1.5px solid var(--green);
+  font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--green);
+  margin-bottom:1.8rem;width:fit-content;
+  background:rgba(10,110,102,.05);
+}
+.conference-pill .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1.main-title{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(2.2rem,3.8vw,3.4rem);
+  line-height:1.12;letter-spacing:-.02em;color:var(--ink);
+  margin-bottom:1.4rem;
+}
+h1.main-title em{
+  font-style:italic;color:var(--green);
+  font-optical-sizing:auto;
+}
+.hero-sub{
+  font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:400;
+  color:var(--ink3);letter-spacing:.02em;margin-bottom:2rem;
+}
+.hero-authors{
+  font-family:'Lora',serif;font-style:italic;font-size:1.05rem;
+  color:var(--ink2);margin-bottom:.35rem;
+}
+.hero-affil{
+  font-family:'Outfit',sans-serif;font-size:.78rem;color:var(--ink3);
+  margin-bottom:2.4rem;line-height:1.8;
+}
+.hero-btns{display:flex;flex-wrap:wrap;gap:.7rem}
+.btn{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.6rem 1.4rem;border-radius:6px;
+  font-family:'Outfit',sans-serif;font-size:.78rem;font-weight:600;
+  letter-spacing:.04em;text-decoration:none;cursor:pointer;border:none;
+  transition:all .2s;
+}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:var(--green);transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,110,102,.25)}
+.btn-ghost{
+  border:1.5px solid var(--border2);color:var(--ink2);background:transparent;
+}
+.btn-ghost:hover{border-color:var(--green);color:var(--green);background:rgba(10,110,102,.04)}
+
+/* Hero right: arch card */
+.arch-card{
+  background:#fff;border:1px solid var(--border);border-radius:14px;
+  box-shadow:var(--shadow-l);padding:1.8rem;width:100%;max-width:460px;
+  position:relative;overflow:hidden;
+}
+.arch-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--green),#5EEAD4,var(--amber));
+}
+.arch-card-title{
+  font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);
+  margin-bottom:1rem;
+}
+
+/* ── SECTION BASE ── */
+.section-wrap{max-width:1080px;margin:0 auto;padding:5.5rem 2.5rem}
+.section-wrap.wide{max-width:100%;padding:5.5rem 0}
+.section-wrap.wide .section-inner{max-width:1080px;margin:0 auto;padding:0 2.5rem}
+.section-num{
+  font-family:'Fraunces',serif;font-weight:700;font-size:.78rem;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--green);
+  display:flex;align-items:center;gap:.6rem;margin-bottom:.9rem;
+}
+.section-num::before{
+  content:'';display:inline-block;width:28px;height:1.5px;background:var(--green);
+}
+h2.section-title{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:clamp(1.9rem,3vw,2.6rem);line-height:1.18;
+  letter-spacing:-.02em;color:var(--ink);margin-bottom:1.4rem;
+}
+.section-lead{
+  font-family:'Lora',serif;font-size:1.1rem;color:var(--ink2);
+  max-width:640px;line-height:1.85;margin-bottom:2.5rem;
+}
+
+/* ── RULE ── */
+.rule{width:100%;height:1px;background:var(--border)}
+
+/* ── ABSTRACT ── */
+.abstract-grid{display:grid;grid-template-columns:5fr 4fr;gap:4rem;align-items:start}
+.abstract-body p{color:var(--ink2);font-size:1.05rem;line-height:1.9}
+.abstract-body p+p{margin-top:1rem}
+.arch-figure{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:12px;padding:1.6rem;box-shadow:var(--shadow-s);
+  position:relative;overflow:hidden;
+}
+.arch-figure::after{
+  content:'Fig. 1';position:absolute;bottom:.7rem;right:.9rem;
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:var(--ink3);letter-spacing:.08em;
+}
+
+/* ── CONTRIBUTIONS ── */
+.contrib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.c-card{
+  border:1px solid var(--border);border-radius:12px;padding:2rem 1.6rem;
+  background:#fff;box-shadow:var(--shadow-s);position:relative;
+  transition:box-shadow .25s,transform .25s,border-color .25s;overflow:hidden;
+}
+.c-card:hover{box-shadow:var(--shadow-m);transform:translateY(-3px);border-color:var(--border2)}
+.c-card-bar{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--green);
+}
+.c-card.amber .c-card-bar{background:var(--amber)}
+.c-card.purple .c-card-bar{background:var(--purple)}
+.c-icon{
+  width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;margin-bottom:1.1rem;
+  background:var(--green-lt);
+}
+.c-card.amber .c-icon{background:var(--amber-lt)}
+.c-card.purple .c-icon{background:var(--purple-lt)}
+.c-card h3{
+  font-family:'Fraunces',serif;font-weight:600;font-size:1.25rem;
+  color:var(--ink);margin-bottom:.6rem;line-height:1.25;
+}
+.c-card p{font-size:.95rem;color:var(--ink2);line-height:1.75}
+.mono-inline{
+  font-family:'JetBrains Mono',monospace;font-size:.79em;
+  color:var(--green);background:var(--green-lt);
+  padding:.1em .35em;border-radius:3px;
+}
+.c-card.amber .mono-inline{color:var(--amber);background:var(--amber-lt)}
+.c-card.purple .mono-inline{color:var(--purple);background:var(--purple-lt)}
+
+/* ── DATA EFFICIENCY STRIP ── */
+.eff-strip{
+  margin-top:2.5rem;border:1px solid var(--border);border-radius:12px;
+  background:var(--surf);display:grid;grid-template-columns:1fr auto;
+  gap:3rem;padding:2.2rem 2.5rem;align-items:center;
+  box-shadow:var(--shadow-s);
+}
+.eff-title{
+  font-family:'Fraunces',serif;font-size:1.2rem;font-weight:600;
+  color:var(--ink);margin-bottom:.5rem;
+}
+.eff-body{font-size:.95rem;color:var(--ink2);line-height:1.8}
+.eff-bars{display:flex;flex-direction:column;gap:.55rem;min-width:340px}
+.eff-row{display:flex;align-items:center;gap:.8rem}
+.eff-label{
+  width:115px;font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;color:var(--ink3);text-align:right;flex-shrink:0;
+}
+.eff-bar-outer{
+  flex:1;height:20px;border-radius:4px;
+  border:1px solid var(--border);background:#fff;overflow:hidden;
+  position:relative;
+}
+.eff-bar-inner{
+  height:100%;border-radius:3px;display:flex;align-items:center;
+  padding:0 .5rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  font-weight:500;white-space:nowrap;
+}
+
+/* ── VISUALIZER ── */
+.viz-wrap{
+  background:var(--surf);border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.upload-zone{
+  border:2px dashed var(--border2);border-radius:10px;padding:2.5rem;
+  text-align:center;cursor:pointer;position:relative;
+  background:#fff;transition:all .2s;
+}
+.upload-zone:hover,.upload-zone.drag{
+  border-color:var(--green);background:rgba(10,110,102,.03);
+}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:2.2rem;margin-bottom:.6rem}
+.upload-zone p{color:var(--ink2);font-family:'Outfit',sans-serif;font-size:.92rem}
+.upload-zone small{color:var(--ink3);font-family:'Outfit',sans-serif;font-size:.78rem}
+.demo-btns{display:flex;gap:.6rem;justify-content:center;margin-top:1rem}
+.demo-btn{
+  padding:.38rem .9rem;border-radius:5px;
+  border:1px solid var(--border2);background:#fff;
+  color:var(--ink2);font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;cursor:pointer;transition:all .18s;
+}
+.demo-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-lt)}
+.viz-controls{
+  display:flex;flex-wrap:wrap;align-items:center;gap:1rem;
+  margin:1.4rem 0;padding:1rem 1.3rem;
+  background:#fff;border:1px solid var(--border);border-radius:8px;
+  box-shadow:var(--shadow-s);
+}
+.vctrl-label{font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:600;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase}
+.vtoggle-group{display:flex;gap:.4rem}
+.vtog{
+  padding:.36rem .85rem;border-radius:5px;font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;border:1px solid var(--border2);background:transparent;
+  color:var(--ink2);cursor:pointer;transition:all .15s;
+}
+.vtog:hover{border-color:var(--green);color:var(--green)}
+.vtog.on{background:var(--green);color:#fff;border-color:var(--green)}
+.band-group{display:flex;align-items:center;gap:.8rem;margin-left:auto}
+.band-group label{font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:500;color:var(--ink2)}
+input[type=range]{
+  -webkit-appearance:none;width:150px;height:3px;
+  border-radius:2px;background:var(--border2);outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
+  background:var(--green);cursor:pointer;
+  box-shadow:0 0 0 3px rgba(10,110,102,.15);
+}
+.band-val{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--green);width:28px}
+.canvas-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin-top:.5rem}
+.cv-panel{
+  background:#fff;border:1px solid var(--border);border-radius:8px;
+  overflow:hidden;transition:border-color .2s,box-shadow .2s;
+}
+.cv-panel canvas{width:100%;display:block;image-rendering:pixelated}
+.cv-label{
+  font-family:'JetBrains Mono',monospace;font-size:.61rem;letter-spacing:.06em;
+  color:var(--ink3);text-align:center;padding:.4rem .5rem;
+  background:var(--surf);border-top:1px solid var(--border);
+}
+.cv-panel.lit{border-color:var(--green);box-shadow:0 0 0 2px rgba(10,110,102,.12)}
+.cv-panel.lit .cv-label{color:var(--green)}
+.viz-hint{
+  font-family:'Lora',serif;font-style:italic;font-size:.88rem;
+  color:var(--ink3);text-align:center;margin-top:1rem;line-height:1.7;
+}
+
+/* ── RESULTS ── */
+.score-row{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem}
+.score-card{
+  flex:1;min-width:140px;background:#fff;border:1px solid var(--border);
+  border-radius:10px;padding:1.4rem 1.6rem;box-shadow:var(--shadow-s);
+  text-align:center;position:relative;overflow:hidden;
+}
+.score-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+.score-val{
+  font-family:'Fraunces',serif;font-size:2.6rem;font-weight:700;
+  color:var(--green);display:block;line-height:1;margin-bottom:.3rem;
+}
+.score-lbl{font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:.5rem}
+.rtable-card{
+  background:#fff;border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;box-shadow:var(--shadow-s);
+}
+.rtable-head{
+  padding:1rem 1.4rem;border-bottom:1px solid var(--border);
+  font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:600;
+  color:var(--ink);background:var(--surf);
+  display:flex;align-items:center;gap:.6rem;
+}
+.rtable-head .tag{
+  padding:.15rem .55rem;border-radius:4px;
+  background:var(--green-lt);color:var(--green);
+  font-size:.65rem;font-weight:700;letter-spacing:.06em;
+}
+table{width:100%;border-collapse:collapse}
+th{
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);
+  padding:.65rem 1.1rem;text-align:left;
+  border-bottom:1px solid var(--border);background:var(--surf);
+}
+td{
+  padding:.62rem 1.1rem;font-size:.9rem;color:var(--ink2);
+  border-bottom:1px solid rgba(221,224,238,.5);font-family:'Outfit',sans-serif;
+}
+tr:last-child td{border-bottom:none}
+tr.best td{color:var(--green);font-weight:600}
+tr.ours{background:rgba(10,110,102,.035)}
+tr.ours td:first-child::before{content:'★ ';color:var(--green);font-size:.7em}
+.num{font-family:'JetBrains Mono',monospace;font-size:.86rem}
+.num.up{color:var(--green);font-weight:500}
+.section-sep{padding:.35rem 1.1rem;background:var(--surf2);border-bottom:1px solid var(--border)}
+.section-sep td{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3)!important;padding:.35rem 1.1rem!important}
+
+/* ── CITATION ── */
+.bibtex-card{
+  background:var(--surf);border:1px solid var(--border);border-radius:10px;
+  padding:1.8rem;position:relative;margin-top:1.5rem;
+  box-shadow:var(--shadow-s);
+}
+.bibtex-card pre{
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;
+  color:var(--ink2);line-height:2;white-space:pre-wrap;word-break:break-word;
+}
+.kw{color:var(--green);font-weight:500}
+.val{color:var(--amber)}
+.copy-btn{
+  position:absolute;top:1rem;right:1rem;
+  padding:.32rem .8rem;border-radius:5px;border:1px solid var(--border2);
+  background:#fff;color:var(--ink3);font-family:'Outfit',sans-serif;
+  font-size:.68rem;font-weight:500;cursor:pointer;transition:all .18s;
+}
+.copy-btn:hover{color:var(--green);border-color:var(--green)}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;padding:2.2rem 1.5rem;
+  border-top:1px solid var(--border);
+  font-family:'Outfit',sans-serif;font-size:.8rem;color:var(--ink3);
+}
+footer a{color:var(--ink2);text-decoration:none}
+footer a:hover{color:var(--green)}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.reveal.up{opacity:1;transform:none}
+.reveal-r{opacity:0;transform:translateX(24px);transition:opacity .65s ease,transform .65s ease}
+.reveal-r.up{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  #hero{grid-template-columns:1fr}.hero-right{display:none}
+  .abstract-grid,.contrib-grid,.results-grid,.eff-strip{grid-template-columns:1fr}
+  .canvas-grid{grid-template-columns:repeat(3,1fr)}
+  nav{padding:.7rem 1.2rem}.nav-links{gap:1.2rem}
+  .hero-left{padding:5rem 1.8rem 4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ────────────────── NAV ────────────────── -->
+<nav>
+  <a class="nav-logo" href="#">LeaRN<span>-CompSTN</span></a>
+  <ul class="nav-links">
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#method">Method</a></li>
+    <li><a href="#visualizer">Demo</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#citation" class="nav-cta">Cite</a></li>
+  </ul>
+</nav>
+
+<!-- ────────────────── HERO ────────────────── -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+
+  <div class="hero-left">
+    <div class="conference-pill"><span class="dot"></span>CVPR 2026 · Denver, CO</div>
+    <h1 class="main-title">
+      Equivariant Unsupervised<br>Object Detection with<br>
+      <em>Learnable Riesz Transform</em><br>and Composite STNs
+    </h1>
+    <p class="hero-sub">LeaRN-CompSTN &nbsp;·&nbsp; SE(2)-equivariance from low data</p>
+    <p class="hero-authors">Sayan Chaki &nbsp;·&nbsp; Thierry Fournel &nbsp;·&nbsp; Rémi Emonet</p>
+    <p class="hero-affil">
+      Université Jean Monnet Saint-Étienne &nbsp;·&nbsp; CNRS<br>
+      Inria &nbsp;·&nbsp; Institut Universitaire de France
+    </p>
+    <div class="hero-btns">
+      <a class="btn btn-dark" href="https://hal.science/hal-05566734v1" target="_blank">📄 Read Paper</a>
+      <a class="btn btn-ghost" href="#visualizer">🔬 Try Live Demo</a>
+      <a class="btn btn-ghost" href="#citation">📋 BibTeX</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="arch-card reveal-r">
+      <div class="arch-card-title">Architecture Overview</div>
+      <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;background:#F6F7FB;border-radius:8px;padding:10px">
+        <!-- LeaRN box -->
+        <rect x="4" y="10" width="72" height="100" rx="5" fill="none" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="40" y="8" fill="#16a34a" font-size="4.5" text-anchor="middle" font-family="monospace" font-weight="600">LeaRN Block</text>
+        <!-- CompSTN box -->
+        <rect x="82" y="10" width="114" height="100" rx="5" fill="none" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="139" y="8" fill="#2563eb" font-size="4.5" text-anchor="middle" font-family="monospace" font-weight="600">CompSTN</text>
+        <!-- Image -->
+        <rect x="6" y="50" width="20" height="18" rx="2" fill="#E2E8F0" stroke="#94A3B8" stroke-width=".5"/>
+        <text x="16" y="60.5" fill="#475569" font-size="3.5" text-anchor="middle" font-family="monospace">Image</text>
+        <!-- ReResNet -->
+        <rect x="10" y="30" width="60" height="14" rx="2" fill="#DCFCE7" stroke="#16a34a" stroke-width=".7"/>
+        <text x="40" y="38.5" fill="#15803d" font-size="4" text-anchor="middle" font-family="monospace">ReResNet</text>
+        <!-- LeaRN -->
+        <rect x="10" y="50" width="60" height="14" rx="2" fill="#DCFCE7" stroke="#16a34a" stroke-width=".7"/>
+        <text x="40" y="58.5" fill="#15803d" font-size="4" text-anchor="middle" font-family="monospace">LeaRN (Riesz)</text>
+        <!-- Rot pool -->
+        <rect x="10" y="70" width="60" height="14" rx="2" fill="#F1F5F9" stroke="#94A3B8" stroke-width=".7"/>
+        <text x="40" y="78.5" fill="#64748b" font-size="3.5" text-anchor="middle" font-family="monospace">rotation pooling</text>
+        <!-- STN 1 -->
+        <rect x="86" y="20" width="46" height="14" rx="2" fill="#FEF9C3" stroke="#CA8A04" stroke-width=".7"/>
+        <text x="109" y="28.5" fill="#92400e" font-size="3.8" text-anchor="middle" font-family="monospace">STN₁ (t, s)</text>
+        <!-- Grid Sampler -->
+        <rect x="138" y="20" width="52" height="14" rx="2" fill="#DBEAFE" stroke="#2563eb" stroke-width=".7" stroke-dasharray="2,1"/>
+        <text x="164" y="28.5" fill="#1d4ed8" font-size="3.8" text-anchor="middle" font-family="monospace">Grid Sampler</text>
+        <!-- STN 2 -->
+        <rect x="86" y="42" width="46" height="14" rx="2" fill="#FEE2E2" stroke="#DC2626" stroke-width=".7"/>
+        <text x="109" y="50.5" fill="#991b1b" font-size="3.8" text-anchor="middle" font-family="monospace">STN₂ (α)</text>
+        <!-- Encoder/decoder -->
+        <rect x="138" y="42" width="52" height="14" rx="2" fill="#F3E8FF" stroke="#7C3AED" stroke-width=".7" stroke-dasharray="2,1"/>
+        <text x="164" y="50.5" fill="#6d28d9" font-size="3.5" text-anchor="middle" font-family="monospace">enc/decoder</text>
+        <!-- Rev sampler -->
+        <rect x="138" y="64" width="52" height="14" rx="2" fill="#DBEAFE" stroke="#2563eb" stroke-width=".7" stroke-dasharray="2,1"/>
+        <text x="164" y="72.5" fill="#1d4ed8" font-size="3.5" text-anchor="middle" font-family="monospace">Rev. Sampler</text>
+        <!-- Recon output -->
+        <rect x="6" y="90" width="20" height="15" rx="2" fill="#E2E8F0" stroke="#94A3B8" stroke-width=".5"/>
+        <text x="16" y="99" fill="#475569" font-size="3.5" text-anchor="middle" font-family="monospace">Recon.</text>
+        <!-- Arrows -->
+        <defs>
+          <marker id="ah" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto">
+            <path d="M0,0 L5,2.5 L0,5 Z" fill="#94A3B8"/>
+          </marker>
+          <marker id="ag" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto">
+            <path d="M0,0 L5,2.5 L0,5 Z" fill="#16a34a"/>
+          </marker>
+        </defs>
+        <line x1="16" y1="68" x2="16" y2="78" stroke="#94A3B8" stroke-width=".6" marker-end="url(#ah)"/>
+        <line x1="16" y1="50" x2="16" y2="50" stroke="none"/>
+        <line x1="70" y1="37" x2="86" y2="27" stroke="#94A3B8" stroke-width=".6" marker-end="url(#ah)"/>
+        <line x1="70" y1="58" x2="86" y2="49" stroke="#94A3B8" stroke-width=".6" marker-end="url(#ah)"/>
+        <line x1="132" y1="27" x2="138" y2="27" stroke="#94A3B8" stroke-width=".6" marker-end="url(#ah)"/>
+        <line x1="132" y1="49" x2="138" y2="49" stroke="#94A3B8" stroke-width=".6" marker-end="url(#ah)"/>
+        <line x1="164" y1="56" x2="164" y2="64" stroke="#94A3B8" stroke-width=".6" marker-end="url(#ah)"/>
+        <line x1="138" y1="71" x2="26" y2="91" stroke="#CBD5E1" stroke-width=".6" stroke-dasharray="2,1.5"/>
+        <!-- Labels -->
+        <text x="135" y="36" fill="#CA8A04" font-size="3.5" font-family="monospace">(t,s)</text>
+        <text x="135" y="58" fill="#DC2626" font-size="3.5" font-family="monospace">α</text>
+        <text x="16" y="44" fill="#16a34a" font-size="3" text-anchor="middle" font-family="monospace">↓</text>
+      </svg>
+      <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+        <span style="padding:.2rem .6rem;border-radius:4px;background:var(--green-lt);color:var(--green);font-family:'JetBrains Mono',monospace;font-size:.6rem">LeaRN</span>
+        <span style="padding:.2rem .6rem;border-radius:4px;background:#FEF9C3;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:.6rem">CompSTN</span>
+        <span style="padding:.2rem .6rem;border-radius:4px;background:var(--purple-lt);color:var(--purple);font-family:'JetBrains Mono',monospace;font-size:.6rem">end-to-end</span>
+        <span style="padding:.2rem .6rem;border-radius:4px;background:var(--surf2);color:var(--ink3);font-family:'JetBrains Mono',monospace;font-size:.6rem">SE(2)-equivariant</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ────────────────── ABSTRACT ────────────────── -->
+<div id="abstract" class="section-wrap">
+  <div class="section-num">01 · Abstract</div>
+  <div class="abstract-grid">
+    <div class="abstract-body reveal">
+      <h2 class="section-title">Learning to see through<br>transformations</h2>
+      <p>Building models robust to rotation, scale, and translation is a core challenge in machine learning and computer vision. Existing approaches often provide only partial, discrete equivariance — or rely on supervision and vast training data to learn equivariant representations.</p>
+      <p>To achieve <strong>fine-grained equivariance from low data</strong>, we combine and improve both worlds. Our <strong>Learnable Riesz-transform Network (LeaRN)</strong> embeds a learnable, steerable frequency-domain weighting that extends built-in group equivariance to include continuous rotation and scale. We pair it with <strong>CompSTN</strong>, a cascade of Spatial Transformer Networks that sequentially estimates composite transformations, slashing the combinatorial data requirement.</p>
+      <p>We provide theoretical generalization guarantees through tighter PAC-Bayesian bounds, propose a new unsupervised rotation consistency metric (RoE), and demonstrate significant improvements over state-of-the-art across unsupervised object discovery benchmarks — with the largest gains under limited data.</p>
+    </div>
+    <div class="reveal-r" style="transition-delay:.1s">
+      <div class="arch-figure">
+        <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;border-radius:6px;overflow:hidden">
+          <!-- Frequency domain background grid -->
+          <rect width="200" height="130" fill="#F8FAFF"/>
+          <g stroke="#E2E8F0" stroke-width=".4">
+            <line x1="0" y1="65" x2="200" y2="65"/>
+            <line x1="100" y1="0" x2="100" y2="130"/>
+            <line x1="0" y1="32.5" x2="200" y2="32.5" stroke-dasharray="2,2"/>
+            <line x1="0" y1="97.5" x2="200" y2="97.5" stroke-dasharray="2,2"/>
+            <line x1="50" y1="0" x2="50" y2="130" stroke-dasharray="2,2"/>
+            <line x1="150" y1="0" x2="150" y2="130" stroke-dasharray="2,2"/>
+          </g>
+          <!-- Riesz equivariance rings (frequency domain) -->
+          <circle cx="100" cy="65" r="15" fill="none" stroke="#0D9488" stroke-width=".7" opacity=".4"/>
+          <circle cx="100" cy="65" r="28" fill="none" stroke="#0D9488" stroke-width=".7" opacity=".3"/>
+          <circle cx="100" cy="65" r="42" fill="none" stroke="#0D9488" stroke-width=".7" opacity=".2"/>
+          <circle cx="100" cy="65" r="56" fill="none" stroke="#0D9488" stroke-width=".5" opacity=".15"/>
+          <!-- Rotation arrows (demonstrating equivariance) -->
+          <path d="M85,40 A22,22 0 0,1 115,40" fill="none" stroke="#D97706" stroke-width="1.2" stroke-dasharray="none" marker-end="url(#arw)"/>
+          <path d="M115,90 A22,22 0 0,1 85,90" fill="none" stroke="#D97706" stroke-width="1.2" marker-end="url(#arw)"/>
+          <defs>
+            <marker id="arw" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto">
+              <path d="M0,0 L5,2.5 L0,5 Z" fill="#D97706"/>
+            </marker>
+          </defs>
+          <!-- Feature vectors at different orientations -->
+          <line x1="100" y1="65" x2="124" y2="45" stroke="#0A6E66" stroke-width="1.3"/>
+          <line x1="100" y1="65" x2="128" y2="65" stroke="#0A6E66" stroke-width="1.3" opacity=".7"/>
+          <line x1="100" y1="65" x2="118" y2="83" stroke="#0A6E66" stroke-width="1.3" opacity=".5"/>
+          <line x1="100" y1="65" x2="76" y2="45" stroke="#0A6E66" stroke-width="1.3" opacity=".4"/>
+          <line x1="100" y1="65" x2="72" y2="65" stroke="#0A6E66" stroke-width="1.3" opacity=".3"/>
+          <!-- Origin dot -->
+          <circle cx="100" cy="65" r="3.5" fill="#0A6E66"/>
+          <circle cx="100" cy="65" r="6" fill="none" stroke="#0A6E66" stroke-width=".5" opacity=".4"/>
+          <!-- Labels -->
+          <text x="100" y="7" fill="#64748b" font-size="4.5" text-anchor="middle" font-family="monospace">Frequency Domain ξ</text>
+          <text x="198" y="67" fill="#94A3B8" font-size="3.5" text-anchor="end" font-family="monospace">ξ₁</text>
+          <text x="102" y="128" fill="#94A3B8" font-size="3.5" font-family="monospace">ξ₂</text>
+          <text x="128" y="43" fill="#0A6E66" font-size="3.5" font-family="monospace">R(I)</text>
+          <text x="82" y="37" fill="#D97706" font-size="3.5" font-family="monospace">rotation</text>
+          <!-- LeaRN weight curve -->
+          <path d="M10,95 Q50,40 100,32 Q150,25 190,55" fill="none" stroke="#7C3AED" stroke-width="1" opacity=".5" stroke-dasharray="2,1.5"/>
+          <text x="158" y="52" fill="#7C3AED" font-size="3.5" font-family="monospace">w(‖ξ‖)</text>
+        </svg>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--ink3);text-align:center;margin-top:.7rem;letter-spacing:.06em">Riesz transform in the frequency domain — equivariant by construction</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ────────────────── METHOD ────────────────── -->
+<div id="method" class="section-wrap">
+  <div class="section-num">02 · Method</div>
+  <h2 class="section-title reveal">Two core contributions</h2>
+  <p class="section-lead reveal">LeaRN and CompSTN work in tandem: the first instills built-in spectral equivariance, the second breaks composite transformation estimation into simpler sequential steps.</p>
+
+  <div class="contrib-grid">
+    <div class="c-card reveal">
+      <div class="c-card-bar"></div>
+      <div class="c-icon">📡</div>
+      <h3>Learnable Riesz Network</h3>
+      <p>Extends the Riesz transform — a steerable, scale-equivariant frequency-domain operator — with learnable radial weights parameterized as a sparse mixture of Laplace distributions:</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:.76rem;line-height:2;margin-top:.9rem;background:var(--surf);padding:.8rem;border-radius:6px;border-left:2px solid var(--green)">
+        <span class="mono-inline">w(ξ) = Σₖ wₖ·exp(−|‖ξ‖−μₖ|)</span><br>
+        ℱ(LR(I))(ξ) = w(ξ)·ℱ(R(I))(ξ)
+      </p>
+      <p style="margin-top:.9rem">Provides continuous <span class="mono-inline">SE(2)</span> equivariance, mitigates aliasing, and is proven to tighten PAC-Bayesian generalization bounds.</p>
+    </div>
+    <div class="c-card amber reveal" style="transition-delay:.1s">
+      <div class="c-card-bar"></div>
+      <div class="c-icon">🔗</div>
+      <h3>Composite Spatial Transformers</h3>
+      <p>A cascade of two STN modules that decomposes composite transformation estimation into a sequence of simpler problems:</p>
+      <ol style="margin-top:.7rem;margin-left:1.2rem;font-size:.93rem;color:var(--ink2);line-height:1.85">
+        <li><strong>STN₁:</strong> Estimates and corrects translation &amp; scale using rotation-invariant features</li>
+        <li><strong>STN₂:</strong> Estimates rotation on the already-canonicalized glimpse</li>
+      </ol>
+      <p style="margin-top:.8rem">Reduces data need from <span class="mono-inline">O(|S|·|α|·|t|)</span> to <span class="mono-inline">O(|S|·|t| + |α|)</span>. Exponentially fewer examples needed.</p>
+    </div>
+    <div class="c-card purple reveal" style="transition-delay:.2s">
+      <div class="c-card-bar"></div>
+      <div class="c-icon">📐</div>
+      <h3>Rotation-Offset Entropy</h3>
+      <p>A new metric for unsupervised rotation recovery. Since no reference angle exists without labels, we measure the <em>consistency</em> of predicted offsets via normalized Shannon entropy:</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:.76rem;line-height:2;margin-top:.9rem;background:var(--surf);padding:.8rem;border-radius:6px;border-left:2px solid var(--purple)">
+        RoE = H(p) / log₂(n)<br>
+        <span style="color:var(--ink3)">0 = perfect · 1 = pure disorder</span>
+      </p>
+      <p style="margin-top:.9rem">First metric to quantify rotation consistency in unsupervised settings. Our model achieves <span class="mono-inline">RoE ≈ 0.35</span> vs. no measurement for prior work.</p>
+    </div>
+  </div>
+
+  <!-- Data efficiency strip -->
+  <div class="eff-strip reveal">
+    <div>
+      <div class="eff-title">Why sequential decomposition matters</div>
+      <p class="eff-body">Standard CNNs must see every combination of rotation, scale, and translation for each object — a combinatorial explosion. LeaRN handles scale and translation by design; CompSTN's two-step decomposition means the rotation STN only needs to learn rotation after translation and scale are already corrected. The result is an exponential reduction in required training examples.</p>
+    </div>
+    <div class="eff-bars">
+      <div class="eff-row">
+        <span class="eff-label">CNN baseline</span>
+        <div class="eff-bar-outer"><div class="eff-bar-inner" style="width:100%;background:#FEE2E2;color:#991b1b">all S × all α × stride T</div></div>
+      </div>
+      <div class="eff-row">
+        <span class="eff-label">ReResNet</span>
+        <div class="eff-bar-outer"><div class="eff-bar-inner" style="width:80%;background:#FEF9C3;color:#92400e">all S × fine α × stride T</div></div>
+      </div>
+      <div class="eff-row">
+        <span class="eff-label">+ STN</span>
+        <div class="eff-bar-outer"><div class="eff-bar-inner" style="width:60%;background:#DBEAFE;color:#1d4ed8">all S × all α</div></div>
+      </div>
+      <div class="eff-row">
+        <span class="eff-label">+ EqSTN</span>
+        <div class="eff-bar-outer"><div class="eff-bar-inner" style="width:40%;background:#DCFCE7;color:#15803d">all S × coarse α</div></div>
+      </div>
+      <div class="eff-row">
+        <span class="eff-label" style="color:var(--green);font-weight:600">LeaRN+CompSTN</span>
+        <div class="eff-bar-outer" style="border-color:var(--green)"><div class="eff-bar-inner" style="width:22%;background:var(--green-lt);color:var(--green);font-weight:600">s × α</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ────────────────── VISUALIZER ────────────────── -->
+<div id="visualizer" class="section-wrap viz-wrap" style="max-width:100%;padding:5.5rem 0">
+<div style="max-width:1080px;margin:0 auto;padding:0 2.5rem">
+  <div class="section-num">03 · Interactive Demo</div>
+  <h2 class="section-title reveal">Riesz Transform Visualizer</h2>
+  <p class="section-lead reveal">Upload any image to compute a genuine FFT-based Riesz transform live in your browser. Adjust the <strong>LeaRN Band μ</strong> slider to simulate the learned frequency-domain weighting — this is exactly what LeaRN learns to do automatically during training.</p>
+
+  <div class="upload-zone reveal" id="upload-zone">
+    <input type="file" id="img-upload" accept="image/*">
+    <div class="upload-icon">🖼</div>
+    <p>Drop an image here, or <strong>click to browse</strong></p>
+    <small>PNG, JPG, WebP · Any size · Processed at 256 × 256</small>
+  </div>
+  <div class="demo-btns">
+    <button class="demo-btn" onclick="loadDemo('stripes')">▶ Stripes</button>
+    <button class="demo-btn" onclick="loadDemo('circle')">▶ Rings</button>
+    <button class="demo-btn" onclick="loadDemo('cross')">▶ Cross</button>
+    <button class="demo-btn" onclick="loadDemo('corner')">▶ Corner</button>
+  </div>
+
+  <div class="viz-controls">
+    <span class="vctrl-label">View:</span>
+    <div class="vtoggle-group">
+      <button class="vtog on" onclick="setVizMode('all',this)">All</button>
+      <button class="vtog" onclick="setVizMode('mag',this)">Magnitude</button>
+      <button class="vtog" onclick="setVizMode('phase',this)">Phase</button>
+    </div>
+    <div class="band-group">
+      <label>LeaRN Band μ:</label>
+      <input type="range" id="band-sl" min="0" max="100" value="100" oninput="onBand(this.value)">
+      <span class="band-val" id="band-display">off</span>
+    </div>
+    <button class="btn btn-ghost" onclick="processImage()" style="padding:.38rem .9rem;font-size:.72rem;margin-left:auto">↺ Reprocess</button>
+  </div>
+
+  <div class="canvas-grid" id="canvas-grid">
+    <div class="cv-panel lit">
+      <canvas id="cv-orig" width="256" height="256"></canvas>
+      <div class="cv-label">Original</div>
+    </div>
+    <div class="cv-panel">
+      <canvas id="cv-r1" width="256" height="256"></canvas>
+      <div class="cv-label">R₁ · horiz. derivative</div>
+    </div>
+    <div class="cv-panel">
+      <canvas id="cv-r2" width="256" height="256"></canvas>
+      <div class="cv-label">R₂ · vert. derivative</div>
+    </div>
+    <div class="cv-panel">
+      <canvas id="cv-mag" width="256" height="256"></canvas>
+      <div class="cv-label">|R| · edge magnitude</div>
+    </div>
+    <div class="cv-panel">
+      <canvas id="cv-phase" width="256" height="256"></canvas>
+      <div class="cv-label">∠R · orientation (hue)</div>
+    </div>
+  </div>
+  <p class="viz-hint">The phase panel encodes edge <em>orientation</em> as hue — rotating the input image shifts all hues predictably, directly demonstrating rotation equivariance. The LeaRN Band slider selects which spatial frequency ring to emphasise.</p>
+</div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ────────────────── RESULTS ────────────────── -->
+<div id="results" class="section-wrap">
+  <div class="section-num">04 · Results</div>
+  <h2 class="section-title reveal">State-of-the-art across all benchmarks</h2>
+  <p class="section-lead reveal">Evaluated on MTRS-MNIST, MVTec D2S, and MVTec Screws under Low Data (80%) and More Data conditions. LeaRN-CompSTN consistently achieves the best AP and mAP, and is the only method to report rotation consistency (RoE).</p>
+
+  <div class="score-row reveal">
+    <div class="score-card"><span class="score-val" data-target="95.77" data-dec="2">0</span><div class="score-lbl">AP · MTRS-MNIST</div></div>
+    <div class="score-card"><span class="score-val" data-target="98.44" data-dec="2">0</span><div class="score-lbl">Accuracy · Rotated-MNIST (LeaRN+GCNN)</div></div>
+    <div class="score-card"><span class="score-val" data-target="0.097" data-dec="3">0</span><div class="score-lbl">LEE (↓ lower = more equivariant)</div></div>
+    <div class="score-card"><span class="score-val" data-target="1.1" data-dec="1">0</span><div class="score-lbl">M parameters · 16 GFLOPs</div></div>
+  </div>
+
+  <div class="results-grid">
+    <div class="rtable-card reveal">
+      <div class="rtable-head">MTRS-MNIST Object Discovery <span class="tag">AP · mAP · RoE</span></div>
+      <table>
+        <thead><tr><th>Model</th><th>AP↑</th><th>mAP↑</th><th>RoE↓</th></tr></thead>
+        <tbody>
+          <tr class="section-sep"><td colspan="4">Low Data (80%)</td></tr>
+          <tr><td>SPAIR</td><td class="num">75.4</td><td>—</td><td>—</td></tr>
+          <tr><td>GMAIR</td><td class="num">75.48</td><td class="num">51.23</td><td>—</td></tr>
+          <tr><td>GNM</td><td class="num">79.14</td><td>—</td><td>—</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMAIR</td><td class="num up">94.32</td><td class="num up">70.44</td><td class="num">0.35</td></tr>
+          <tr class="section-sep"><td colspan="4">More Data (full)</td></tr>
+          <tr><td>GNM</td><td class="num">85.97</td><td>—</td><td>—</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMAIR</td><td class="num up">95.77</td><td class="num up">72.11</td><td class="num">0.39</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rtable-card reveal" style="transition-delay:.1s">
+      <div class="rtable-head">MVTec Screws <span class="tag">Object Discovery</span></div>
+      <table>
+        <thead><tr><th>Model</th><th>AP↑</th><th>mAP↑</th><th>RoE↓</th></tr></thead>
+        <tbody>
+          <tr class="section-sep"><td colspan="4">Low Data (80%)</td></tr>
+          <tr><td>SPACE</td><td class="num">67.55</td><td>—</td><td>—</td></tr>
+          <tr><td>SPAGMACE</td><td class="num">71.43</td><td class="num">59.76</td><td class="num">0.47</td></tr>
+          <tr><td>GNM</td><td class="num">71.85</td><td>—</td><td>—</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+SPACE</td><td class="num up">79.42</td><td>—</td><td>—</td></tr>
+          <tr class="section-sep"><td colspan="4">More Data (full)</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+SPACE</td><td class="num up">79.92</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rtable-card reveal" style="transition-delay:.15s">
+      <div class="rtable-head">Autoencoding SR-MNIST <span class="tag">NMI · ARI · SSIM</span></div>
+      <table>
+        <thead><tr><th>Model</th><th>NMI↑</th><th>ARI↑</th><th>SSIM↑</th></tr></thead>
+        <tbody>
+          <tr class="section-sep"><td colspan="4">Low Data (80%)</td></tr>
+          <tr><td>TARGET-VAE</td><td class="num">0.63</td><td class="num">0.51</td><td class="num">0.77</td></tr>
+          <tr><td>IRL-INR</td><td class="num">0.65</td><td class="num">0.51</td><td class="num">0.69</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMVAE</td><td class="num up">0.78</td><td class="num up">0.62</td><td class="num up">0.83</td></tr>
+          <tr class="section-sep"><td colspan="4">More Data (full)</td></tr>
+          <tr><td>IRL-INR</td><td class="num">0.83</td><td class="num">0.78</td><td class="num">0.94</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMVAE</td><td class="num up">0.88</td><td class="num up">0.80</td><td class="num up">0.95</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rtable-card reveal" style="transition-delay:.2s">
+      <div class="rtable-head">Classification · Rotated-MNIST <span class="tag">Accuracy</span></div>
+      <table>
+        <thead><tr><th>Feature Extractor</th><th>Accuracy</th></tr></thead>
+        <tbody>
+          <tr><td>Standard CNN</td><td class="num">70.41%</td></tr>
+          <tr><td>GroupConv (GCNN)</td><td class="num">82.76%</td></tr>
+          <tr><td>Riesz + CNN</td><td class="num">89.78%</td></tr>
+          <tr><td>Riesz + GCNN</td><td class="num">93.45%</td></tr>
+          <tr class="ours best"><td>LeaRN + GCNN (ours)</td><td class="num up">98.44%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ────────────────── CITATION ────────────────── -->
+<div id="citation" class="section-wrap">
+<div style="max-width:720px">
+  <div class="section-num">05 · Citation</div>
+  <h2 class="section-title reveal">Cite this work</h2>
+  <div class="bibtex-card reveal">
+    <button class="copy-btn" onclick="doCopy()">Copy</button>
+    <pre><span class="kw">@inproceedings{</span><span class="val">chaki2026learnstn</span>,
+  <span class="kw">author</span>    = {<span class="val">Chaki, Sayan and Fournel, Thierry and Emonet, R{\'e}mi</span>},
+  <span class="kw">title</span>     = {<span class="val">Equivariant Unsupervised Object Detection with
+               Learnable Riesz Transform and Composite Spatial Transformers</span>},
+  <span class="kw">booktitle</span> = {<span class="val">Proceedings of the IEEE/CVF Conference on Computer
+               Vision and Pattern Recognition (CVPR)</span>},
+  <span class="kw">year</span>      = {<span class="val">2026</span>},
+  <span class="kw">note</span>      = {<span class="val">HAL: hal-05566734</span>},
+<span class="kw">}</span></pre>
+  </div>
+  <p style="font-family:'Outfit',sans-serif;font-size:.82rem;color:var(--ink3);margin-top:1rem;line-height:1.7">
+    Supported by the French National Research Agency (ANR) via the ROIi project ANR-020-CE38-0005-02.
+  </p>
+</div>
+</div>
+
+<footer>
+  <p>LeaRN-CompSTN &nbsp;·&nbsp; <a href="https://cvpr.thecvf.com/" target="_blank">CVPR 2026</a> &nbsp;·&nbsp; <a href="https://hal.science/hal-05566734v1" target="_blank">hal.science/hal-05566734v1</a></p>
+  <p style="margin-top:.4rem">Université Jean Monnet Saint-Étienne · CNRS · Inria · IUF</p>
+</footer>
+
+<script>
+// ══ HERO CANVAS — delicate interference rings on white ══
+(()=>{
+  const cv = document.getElementById('hero-canvas');
+  const ctx = cv.getContext('2d');
+  let W, H, t = 0;
+  const sources = [
+    {x:.3,y:.5,c:[10,110,102],speed:.007,freq:.045},
+    {x:.7,y:.3,c:[180,120,0],speed:.005,freq:.038},
+    {x:.6,y:.7,c:[92,63,191],speed:.009,freq:.052},
+    {x:.15,y:.25,c:[10,110,102],speed:.006,freq:.03},
+    {x:.85,y:.7,c:[180,120,0],speed:.008,freq:.041},
+  ];
+  function resize(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    sources.forEach(s=>{
+      const x=s.x*W, y=s.y*H;
+      const maxR = Math.max(W,H)*.8;
+      const phase = t*s.speed;
+      for(let r=10;r<maxR;r+=10){
+        const wave = (Math.sin(r*s.freq - phase)+1)*.5;
+        const alpha = wave * (1-r/maxR) * .07;
+        ctx.beginPath();
+        ctx.arc(x,y,r,0,Math.PI*2);
+        ctx.strokeStyle=`rgba(${s.c[0]},${s.c[1]},${s.c[2]},${alpha})`;
+        ctx.lineWidth=1.5;
+        ctx.stroke();
+      }
+    });
+    t++;
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);
+  resize(); draw();
+})();
+
+// ══ SCROLL REVEAL ══
+const sobs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('up')});
+},{threshold:.1});
+document.querySelectorAll('.reveal,.reveal-r').forEach(el=>sobs.observe(el));
+
+// ══ COUNT-UP ══
+const cobs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;
+    const target=parseFloat(el.dataset.target);
+    const dec=parseInt(el.dataset.dec||0);
+    let s=null;
+    const anim=ts=>{
+      if(!s)s=ts;
+      const p=Math.min((ts-s)/1300,1);
+      const ease=1-Math.pow(1-p,3);
+      el.textContent=(target*ease).toFixed(dec);
+      if(p<1)requestAnimationFrame(anim);
+      else el.textContent=target.toFixed(dec);
+    };
+    requestAnimationFrame(anim);
+    cobs.unobserve(el);
+  });
+},{threshold:.6});
+document.querySelectorAll('[data-target]').forEach(el=>cobs.observe(el));
+
+// ══ FFT ══
+function fft1d(re,im,inv){
+  const N=re.length;
+  for(let i=1,j=0;i<N;i++){
+    let b=N>>1;
+    for(;j&b;b>>=1)j^=b;
+    j^=b;
+    if(i<j){let t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t;}
+  }
+  for(let len=2;len<=N;len<<=1){
+    const ang=2*Math.PI/len*(inv?1:-1);
+    const wRe=Math.cos(ang),wIm=Math.sin(ang);
+    for(let i=0;i<N;i+=len){
+      let cRe=1,cIm=0;
+      for(let j=0;j<(len>>1);j++){
+        const a=i+j,b=i+j+(len>>1);
+        const uRe=re[a],uIm=im[a];
+        const vRe=re[b]*cRe-im[b]*cIm,vIm=re[b]*cIm+im[b]*cRe;
+        re[a]=uRe+vRe;im[a]=uIm+vIm;re[b]=uRe-vRe;im[b]=uIm-vIm;
+        const tmp=cRe*wRe-cIm*wIm;cIm=cRe*wIm+cIm*wRe;cRe=tmp;
+      }
+    }
+  }
+  if(inv)for(let i=0;i<N;i++){re[i]/=N;im[i]/=N;}
+}
+function fft2d(re,im,N,inv){
+  const r=new Float64Array(N),ri=new Float64Array(N);
+  for(let row=0;row<N;row++){
+    for(let c=0;c<N;c++){r[c]=re[row*N+c];ri[c]=im[row*N+c];}
+    fft1d(r,ri,inv);
+    for(let c=0;c<N;c++){re[row*N+c]=r[c];im[row*N+c]=ri[c];}
+  }
+  for(let col=0;col<N;col++){
+    for(let row=0;row<N;row++){r[row]=re[row*N+col];ri[row]=im[row*N+col];}
+    fft1d(r,ri,inv);
+    for(let row=0;row<N;row++){re[row*N+col]=r[row];im[row*N+col]=ri[row];}
+  }
+}
+
+// ══ RIESZ TRANSFORM ══
+function riesz(gray,N,mu){
+  const fRe=new Float64Array(N*N),fIm=new Float64Array(N*N);
+  for(let i=0;i<N*N;i++)fRe[i]=gray[i];
+  fft2d(fRe,fIm,N,false);
+  const r1Re=new Float64Array(N*N),r1Im=new Float64Array(N*N);
+  const r2Re=new Float64Array(N*N),r2Im=new Float64Array(N*N);
+  for(let ky=0;ky<N;ky++)for(let kx=0;kx<N;kx++){
+    const x1=kx<=N/2?kx/N:(kx-N)/N;
+    const x2=ky<=N/2?ky/N:(ky-N)/N;
+    const nr=Math.sqrt(x1*x1+x2*x2);
+    if(nr<1e-12)continue;
+    const f1=x1/nr,f2=x2/nr;
+    const w=mu>=0?Math.exp(-4*Math.abs(nr-mu)):1;
+    const idx=ky*N+kx;
+    r1Re[idx]=fIm[idx]*f1*w; r1Im[idx]=-fRe[idx]*f1*w;
+    r2Re[idx]=fIm[idx]*f2*w; r2Im[idx]=-fRe[idx]*f2*w;
+  }
+  fft2d(r1Re,r1Im,N,true);
+  fft2d(r2Re,r2Im,N,true);
+  return{r1:r1Re,r2:r2Re};
+}
+
+// ══ CANVAS RENDERS ══
+function imgToGray(imgEl,N){
+  const c=document.createElement('canvas');c.width=c.height=N;
+  const x=c.getContext('2d');x.drawImage(imgEl,0,0,N,N);
+  const d=x.getImageData(0,0,N,N).data;
+  const g=new Float64Array(N*N);
+  for(let i=0;i<N*N;i++)g[i]=(d[i*4]*.299+d[i*4+1]*.587+d[i*4+2]*.114)/255;
+  return g;
+}
+function drawDiv(cv,data,N){
+  const ctx=cv.getContext('2d'),id=ctx.createImageData(N,N);
+  let mx=0;for(let i=0;i<N*N;i++)mx=Math.max(mx,Math.abs(data[i]));
+  if(!mx)mx=1;
+  for(let i=0;i<N*N;i++){
+    const v=data[i]/mx;
+    let r,g,b;
+    if(v>0){r=Math.round(30+v*220);g=Math.round(80+v*140);b=Math.round(240-v*200);}
+    else{const u=-v;r=Math.round(240-u*200);g=Math.round(80+u*140);b=Math.round(30+u*220);}
+    id.data[i*4]=r;id.data[i*4+1]=g;id.data[i*4+2]=b;id.data[i*4+3]=255;
+  }
+  ctx.putImageData(id,0,0);
+}
+function drawMag(cv,r1,r2,N){
+  const ctx=cv.getContext('2d'),id=ctx.createImageData(N,N);
+  let mx=0;
+  for(let i=0;i<N*N;i++){const m=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i]);if(m>mx)mx=m;}
+  if(!mx)mx=1;
+  for(let i=0;i<N*N;i++){
+    const t=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i])/mx;
+    // viridis-ish
+    const r=Math.round(68+t*(253-68));
+    const g=Math.round(1+t*t*(231-1));
+    const b=Math.round(84-t*84+t*t*Math.max(0,37-84));
+    id.data[i*4]=Math.round(68*(1-t)+253*t*t);
+    id.data[i*4+1]=Math.round(t*(1-t)*200+t*t*231);
+    id.data[i*4+2]=Math.round(84*(1-t)*2+Math.max(0,37*t*t));
+    id.data[i*4+3]=255;
+  }
+  ctx.putImageData(id,0,0);
+}
+function drawPhase(cv,r1,r2,N){
+  const ctx=cv.getContext('2d'),id=ctx.createImageData(N,N);
+  let mx=0;
+  for(let i=0;i<N*N;i++){const m=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i]);if(m>mx)mx=m;}
+  if(!mx)mx=1;
+  for(let i=0;i<N*N;i++){
+    const ph=(Math.atan2(r2[i],r1[i])+Math.PI)/(2*Math.PI);
+    const al=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i])/mx;
+    const [r,g,b]=hsl(ph*360,.9*al,.45+.15*(1-al));
+    id.data[i*4]=r;id.data[i*4+1]=g;id.data[i*4+2]=b;id.data[i*4+3]=255;
+  }
+  ctx.putImageData(id,0,0);
+}
+function hsl(h,s,l){
+  const a=s*Math.min(l,1-l);
+  const f=n=>{const k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1));};
+  return[f(0)*255,f(8)*255,f(4)*255].map(Math.round);
+}
+
+// ══ STATE ══
+let curImg=null, bandMu=-1;
+function processImage(){
+  if(!curImg)return;
+  const N=256;
+  const gray=imgToGray(curImg,N);
+  const co=document.getElementById('cv-orig').getContext('2d');
+  co.drawImage(curImg,0,0,N,N);
+  const{r1,r2}=riesz(gray,N,bandMu);
+  drawDiv(document.getElementById('cv-r1'),r1,N);
+  drawDiv(document.getElementById('cv-r2'),r2,N);
+  drawMag(document.getElementById('cv-mag'),r1,r2,N);
+  drawPhase(document.getElementById('cv-phase'),r1,r2,N);
+}
+function onBand(v){
+  const n=parseInt(v);
+  bandMu=n>=100?-1:n/200;
+  document.getElementById('band-display').textContent=n>=100?'off':(n/200).toFixed(2);
+  processImage();
+}
+function loadDemo(type){
+  const c=document.createElement('canvas');c.width=c.height=256;
+  const x=c.getContext('2d');
+  x.fillStyle='#f0f0f0';x.fillRect(0,0,256,256);
+  if(type==='stripes'){
+    for(let i=0;i<256;i++){const v=Math.sin(i*.16)*90+140;x.fillStyle=`rgb(${v|0},${v|0},${v|0})`;x.fillRect(0,i,256,1);}
+    x.save();x.translate(128,128);x.rotate(.8);x.translate(-128,-128);
+    for(let i=0;i<256;i++){const v=Math.sin(i*.12)*50+80;x.fillStyle=`rgba(${v|0},180,${v|0},.55)`;x.fillRect(0,i,256,1);}
+    x.restore();
+  }else if(type==='circle'){
+    for(let y=0;y<256;y++)for(let xa=0;xa<256;xa++){
+      const d=Math.sqrt((xa-128)**2+(y-128)**2);
+      const v=(Math.cos(d*.16)+1)*110+35|0;
+      x.fillStyle=`rgb(${v},${v},${v})`;x.fillRect(xa,y,1,1);
+    }
+  }else if(type==='cross'){
+    x.fillStyle='#222';x.fillRect(118,10,20,236);x.fillRect(10,118,236,20);
+    x.save();x.translate(128,128);x.rotate(Math.PI/4);x.translate(-128,-128);
+    x.fillStyle='rgba(10,110,102,.6)';x.fillRect(120,10,16,236);x.fillRect(10,120,236,16);
+    x.restore();
+  }else if(type==='corner'){
+    const g=x.createRadialGradient(40,40,2,128,128,160);
+    g.addColorStop(0,'#111');g.addColorStop(.4,'#888');g.addColorStop(1,'#eee');
+    x.fillStyle=g;x.fillRect(0,0,256,256);
+    x.strokeStyle='rgba(10,110,102,.5)';x.lineWidth=3;
+    for(let r=20;r<200;r+=28){x.beginPath();x.arc(40,40,r,0,Math.PI/2);x.stroke();}
+  }
+  const img=new Image();
+  img.onload=()=>{curImg=img;processImage();};
+  img.src=c.toDataURL();
+}
+function setVizMode(mode,btn){
+  document.querySelectorAll('.vtog').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const panels=document.querySelectorAll('.cv-panel');
+  if(mode==='all')panels.forEach(p=>p.style.display='block');
+  else if(mode==='mag')panels.forEach((p,i)=>p.style.display=i===3?'block':'none');
+  else if(mode==='phase')panels.forEach((p,i)=>p.style.display=i===4?'block':'none');
+}
+
+// ══ FILE UPLOAD ══
+document.getElementById('img-upload').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const img=new Image();img.onload=()=>{curImg=img;processImage();};
+  img.src=URL.createObjectURL(f);
+});
+const uz=document.getElementById('upload-zone');
+uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag')});
+uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
+uz.addEventListener('drop',e=>{
+  e.preventDefault();uz.classList.remove('drag');
+  const f=e.dataTransfer.files[0];if(!f)return;
+  const img=new Image();img.onload=()=>{curImg=img;processImage();};
+  img.src=URL.createObjectURL(f);
+});
+
+// ══ COPY BIBTEX ══
+function doCopy(){
+  navigator.clipboard.writeText(document.querySelector('.bibtex-card pre').textContent).then(()=>{
+    const b=document.querySelector('.copy-btn');
+    b.textContent='Copied ✓';b.style.color='var(--green)';b.style.borderColor='var(--green)';
+    setTimeout(()=>{b.textContent='Copy';b.style.color='';b.style.borderColor='';},2000);
+  });
+}
+
+// Load demo on start
+window.addEventListener('load',()=>loadDemo('circle'));
+</script>
+</body>
+</html>
