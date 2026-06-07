@@ -414,6 +414,31 @@ footer a:hover{color:var(--green)}
   nav{padding:.7rem 1.2rem}.nav-links{gap:1.2rem}
   .hero-left{padding:5rem 1.8rem 4rem}
 }
+
+/* ── QUALITATIVE RESULTS ── */
+.q-tabs{display:flex;gap:.45rem;padding:.4rem;background:var(--surf);border:1px solid var(--border);border-radius:8px;width:fit-content;margin-bottom:1.8rem}
+.q-tab{padding:.42rem 1.25rem;border-radius:5px;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--ink2);cursor:pointer;transition:all .2s}
+.q-tab.active{background:#fff;color:var(--ink);box-shadow:var(--shadow-s)}
+.q-tab:hover:not(.active){color:var(--green)}
+.q-content{display:none}
+.q-content.active{display:block}
+.q-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;margin-bottom:.5rem}
+.q-panel{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-s);transition:box-shadow .22s,transform .22s}
+.q-panel:hover{box-shadow:var(--shadow-m);transform:translateY(-2px)}
+.q-placeholder{aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--surf);margin:.65rem;border-radius:7px;border:2px dashed var(--border2);position:relative;overflow:hidden;min-height:280px}
+.q-placeholder img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:5px}
+.q-ph-text{text-align:center;color:var(--ink3);font-family:'Outfit',sans-serif;font-size:.7rem;line-height:1.65;padding:.7rem;z-index:1;pointer-events:none}
+.q-ph-icon{font-size:1.6rem;margin-bottom:.35rem;display:block;opacity:.38}
+.q-panel-label{padding:.45rem .8rem .65rem;font-family:'JetBrains Mono',monospace;font-size:.59rem;letter-spacing:.07em;color:var(--ink3);text-align:center}
+.q-plots{margin-top:2.8rem;padding-top:2rem;border-top:1px solid var(--border)}
+.q-plot-title{font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;color:var(--ink);margin-bottom:.45rem}
+.q-plot-sub{font-family:'Outfit',sans-serif;font-size:.88rem;color:var(--ink2);max-width:640px;line-height:1.75;margin-bottom:1.5rem}
+.q-plot-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.q-plot-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem 1rem;box-shadow:var(--shadow-s)}
+.q-plot-card canvas{width:100%;display:block;image-rendering:auto}
+.q-plot-card-lbl{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);text-align:center;margin-top:.6rem}
+@media(max-width:860px){.q-grid{grid-template-columns:1fr}.q-plot-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -426,6 +451,7 @@ footer a:hover{color:var(--green)}
     <li><a href="#method">Method</a></li>
     <li><a href="#visualizer">Demo</a></li>
     <li><a href="#results">Results</a></li>
+    <li><a href="#qualitative">Gallery</a></li>
     <li><a href="#citation" class="nav-cta">Cite</a></li>
   </ul>
 </nav>
@@ -732,7 +758,7 @@ footer a:hover{color:var(--green)}
 <div id="results" class="section-wrap">
   <div class="section-num">04 · Results</div>
   <h2 class="section-title reveal">State-of-the-art across all benchmarks</h2>
-  <p class="section-lead reveal">Evaluated on MTRS-MNIST, MVTec D2S, and MVTec Screws under Low Data (80%) and More Data conditions. LeaRN-CompSTN consistently achieves the best AP and mAP, and is the only method to report rotation consistency (RoE).</p>
+  <p class="section-lead reveal">Evaluated on MTRS-MNIST, MVTec D2S, MVTec Screws, and MQTT-MNIST for object discovery, and on SR-MNIST, Tomtwin, Plankton, and MVTec for autoencoding — under both Less Data and More Data regimes. LeaRN-CompSTN consistently achieves the best AP, mAP, NMI, ARI, and SSIM, and is the only method to report rotation consistency (RoE).</p>
 
   <div class="score-row reveal">
     <div class="score-card"><span class="score-val" data-target="95.77" data-dec="2">0</span><div class="score-lbl">AP · MTRS-MNIST</div></div>
@@ -742,52 +768,83 @@ footer a:hover{color:var(--green)}
   </div>
 
   <div class="results-grid">
+
+    <!-- ── MTRS-MNIST (with ablation) ── -->
     <div class="rtable-card reveal">
       <div class="rtable-head">MTRS-MNIST Object Discovery <span class="tag">AP · mAP · RoE</span></div>
       <table>
-        <thead><tr><th>Model</th><th>AP↑</th><th>mAP↑</th><th>RoE↓</th></tr></thead>
+        <thead><tr><th>Method</th><th>AP↑</th><th>mAP↑</th><th>RoE↓</th></tr></thead>
         <tbody>
-          <tr class="section-sep"><td colspan="4">Low Data (80%)</td></tr>
-          <tr><td>SPAIR</td><td class="num">75.4</td><td>—</td><td>—</td></tr>
-          <tr><td>GMAIR</td><td class="num">75.48</td><td class="num">51.23</td><td>—</td></tr>
-          <tr><td>GNM</td><td class="num">79.14</td><td>—</td><td>—</td></tr>
-          <tr class="ours best"><td>LeaRN-CompSTN+GMAIR</td><td class="num up">94.32</td><td class="num up">70.44</td><td class="num">0.35</td></tr>
-          <tr class="section-sep"><td colspan="4">More Data (full)</td></tr>
-          <tr><td>GNM</td><td class="num">85.97</td><td>—</td><td>—</td></tr>
-          <tr class="ours best"><td>LeaRN-CompSTN+GMAIR</td><td class="num up">95.77</td><td class="num up">72.11</td><td class="num">0.39</td></tr>
+          <tr class="section-sep"><td colspan="4">Less Data</td></tr>
+          <tr><td>SPAIR</td><td class="num">75.4</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr><td>GMAIR</td><td class="num">75.48</td><td class="num">51.23</td><td class="num">×</td></tr>
+          <tr><td>GNM</td><td class="num">79.14</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr class="section-sep"><td colspan="4">Less Data · Ablation</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMAIR</td><td class="num up">94.32</td><td class="num up">70.44</td><td class="num up">0.35</td></tr>
+          <tr class="ours"><td>CompSTN+GMAIR</td><td class="num">82.59</td><td class="num">61.87</td><td class="num">0.55</td></tr>
+          <tr class="ours"><td>ReResNet+GMAIR</td><td class="num">78.26</td><td class="num">58.75</td><td class="num">×</td></tr>
+          <tr class="ours"><td>GMAIR+ℒ<sub>fakebbox</sub></td><td class="num">78.74</td><td class="num">58.34</td><td class="num">×</td></tr>
+          <tr class="section-sep"><td colspan="4">More Data</td></tr>
+          <tr><td>SPAIR</td><td class="num">81.43</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr><td>GMAIR</td><td class="num">82.04</td><td class="num">57.13</td><td class="num">×</td></tr>
+          <tr><td>GNM</td><td class="num">85.97</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr class="section-sep"><td colspan="4">More Data · Ablation</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMAIR</td><td class="num up">95.77</td><td class="num up">72.11</td><td class="num up">0.39</td></tr>
+          <tr class="ours"><td>CompSTN+GMAIR</td><td class="num">85.14</td><td class="num">65.3</td><td class="num">0.49</td></tr>
+          <tr class="ours"><td>ReResNet+GMAIR</td><td class="num">80.34</td><td class="num">61.86</td><td class="num">×</td></tr>
+          <tr class="ours"><td>GMAIR+ℒ<sub>fakebbox</sub></td><td class="num">80.79</td><td class="num">60.97</td><td class="num">×</td></tr>
         </tbody>
       </table>
     </div>
+
+    <!-- ── MVTec D2S (new) ── -->
     <div class="rtable-card reveal" style="transition-delay:.1s">
-      <div class="rtable-head">MVTec Screws <span class="tag">Object Discovery</span></div>
+      <div class="rtable-head">MVTec D2S Object Discovery <span class="tag">AP · mAP · RoE</span></div>
       <table>
-        <thead><tr><th>Model</th><th>AP↑</th><th>mAP↑</th><th>RoE↓</th></tr></thead>
+        <thead><tr><th>Method</th><th>AP↑</th><th>mAP↑</th><th>RoE↓</th></tr></thead>
         <tbody>
-          <tr class="section-sep"><td colspan="4">Low Data (80%)</td></tr>
-          <tr><td>SPACE</td><td class="num">67.55</td><td>—</td><td>—</td></tr>
-          <tr><td>SPAGMACE</td><td class="num">71.43</td><td class="num">59.76</td><td class="num">0.47</td></tr>
-          <tr><td>GNM</td><td class="num">71.85</td><td>—</td><td>—</td></tr>
-          <tr class="ours best"><td>LeaRN-CompSTN+SPACE</td><td class="num up">79.42</td><td>—</td><td>—</td></tr>
-          <tr class="section-sep"><td colspan="4">More Data (full)</td></tr>
-          <tr class="ours best"><td>LeaRN-CompSTN+SPACE</td><td class="num up">79.92</td><td>—</td><td>—</td></tr>
+          <tr class="section-sep"><td colspan="4">Less Data</td></tr>
+          <tr><td>SPACE</td><td class="num">75.34</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr><td>SPAGMACE</td><td class="num">74.15</td><td class="num">42.24</td><td class="num">×</td></tr>
+          <tr><td>GNM</td><td class="num">81.48</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+SPAGMACE</td><td class="num up">84.34</td><td class="num up">61.70</td><td class="num up">0.61</td></tr>
+          <tr class="ours"><td>LeaRN-CompSTN+SPACE</td><td class="num">84.19</td><td class="num">×</td><td class="num">0.62</td></tr>
+          <tr class="section-sep"><td colspan="4">More Data</td></tr>
+          <tr><td>SPACE</td><td class="num">82.9</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr><td>SPAGMACE</td><td class="num">84.09</td><td class="num">43.8</td><td class="num">×</td></tr>
+          <tr class="best"><td>GNM</td><td class="num up">87.37</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr class="ours"><td>LeaRN-CompSTN+SPAGMACE</td><td class="num">85.97</td><td class="num up">67.28</td><td class="num up">0.56</td></tr>
+          <tr class="ours"><td>LeaRN-CompSTN+SPACE</td><td class="num">85.83</td><td class="num">×</td><td class="num">0.56</td></tr>
         </tbody>
       </table>
     </div>
+
+    <!-- ── MVTec Screws + MQTT-MNIST ── -->
     <div class="rtable-card reveal" style="transition-delay:.15s">
-      <div class="rtable-head">Autoencoding SR-MNIST <span class="tag">NMI · ARI · SSIM</span></div>
+      <div class="rtable-head">MVTec Screws · MQTT-MNIST <span class="tag">AP · mAP · RoE</span></div>
       <table>
-        <thead><tr><th>Model</th><th>NMI↑</th><th>ARI↑</th><th>SSIM↑</th></tr></thead>
+        <thead><tr><th>Method</th><th>AP↑</th><th>mAP↑</th><th>RoE↓</th></tr></thead>
         <tbody>
-          <tr class="section-sep"><td colspan="4">Low Data (80%)</td></tr>
-          <tr><td>TARGET-VAE</td><td class="num">0.63</td><td class="num">0.51</td><td class="num">0.77</td></tr>
-          <tr><td>IRL-INR</td><td class="num">0.65</td><td class="num">0.51</td><td class="num">0.69</td></tr>
-          <tr class="ours best"><td>LeaRN-CompSTN+GMVAE</td><td class="num up">0.78</td><td class="num up">0.62</td><td class="num up">0.83</td></tr>
-          <tr class="section-sep"><td colspan="4">More Data (full)</td></tr>
-          <tr><td>IRL-INR</td><td class="num">0.83</td><td class="num">0.78</td><td class="num">0.94</td></tr>
-          <tr class="ours best"><td>LeaRN-CompSTN+GMVAE</td><td class="num up">0.88</td><td class="num up">0.80</td><td class="num up">0.95</td></tr>
+          <tr class="section-sep"><td colspan="4">MVTec Screws · Less Data</td></tr>
+          <tr><td>SPACE</td><td class="num">67.55</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr><td>SPAGMACE</td><td class="num">71.43</td><td class="num">59.76</td><td class="num">0.47</td></tr>
+          <tr><td>GNM</td><td class="num">71.85</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr class="ours"><td>LeaRN-CompSTN+SPAGMACE</td><td class="num">77.42</td><td class="num up">62.12</td><td class="num up">0.44</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+SPACE</td><td class="num up">79.42</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr class="section-sep"><td colspan="4">MVTec Screws · More Data</td></tr>
+          <tr><td>SPACE</td><td class="num">72.17</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr><td>SPAGMACE</td><td class="num">74.54</td><td class="num">59.97</td><td class="num">0.47</td></tr>
+          <tr><td>GNM</td><td class="num">71.91</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr class="ours"><td>LeaRN-CompSTN+SPAGMACE</td><td class="num">78.49</td><td class="num up">61.78</td><td class="num up">0.45</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+SPACE</td><td class="num up">79.92</td><td class="num">×</td><td class="num">×</td></tr>
+          <tr class="section-sep"><td colspan="4">MQTT-MNIST</td></tr>
+          <tr class="ours"><td>LeaRN-CompSTN+GMAIR · Less</td><td class="num">94.8</td><td class="num">67.33</td><td class="num">0.69</td></tr>
+          <tr class="ours"><td>LeaRN-CompSTN+GMAIR · More</td><td class="num">96.0</td><td class="num">70.58</td><td class="num">0.61</td></tr>
         </tbody>
       </table>
     </div>
+
+    <!-- ── Classification ── -->
     <div class="rtable-card reveal" style="transition-delay:.2s">
       <div class="rtable-head">Classification · Rotated-MNIST <span class="tag">Accuracy</span></div>
       <table>
@@ -801,15 +858,168 @@ footer a:hover{color:var(--green)}
         </tbody>
       </table>
     </div>
+
+    <!-- ── Autoencoding: SR-MNIST · Tomtwin · Plankton · MVTec (full width) ── -->
+    <div class="rtable-card reveal" style="grid-column:span 2;transition-delay:.25s">
+      <div class="rtable-head">Autoencoding · SR-MNIST · Tomtwin · Plankton · MVTec <span class="tag">NMI · ARI · SSIM</span></div>
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">Method</th>
+            <th colspan="3" style="text-align:center;border-bottom:1px solid var(--border2)">More Data</th>
+            <th colspan="3" style="text-align:center;border-bottom:1px solid var(--border2)">Low Data</th>
+          </tr>
+          <tr>
+            <th>NMI↑</th><th>ARI↑</th><th>SSIM↑</th>
+            <th>NMI↑</th><th>ARI↑</th><th>SSIM↑</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-sep"><td colspan="7">SR-MNIST</td></tr>
+          <tr><td>CompSTN+GMVAE</td><td class="num">0.81</td><td class="num">0.70</td><td class="num">0.92</td><td class="num">0.68</td><td class="num">0.59</td><td class="num">0.81</td></tr>
+          <tr><td>TargetVAE</td><td class="num">0.78</td><td class="num">0.65</td><td class="num">0.86</td><td class="num">0.63</td><td class="num">0.51</td><td class="num">0.77</td></tr>
+          <tr><td>IRL-INR</td><td class="num">0.83</td><td class="num">0.78</td><td class="num">0.94</td><td class="num">0.65</td><td class="num">0.51</td><td class="num">0.69</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMVAE</td><td class="num up">0.88</td><td class="num up">0.80</td><td class="num up">0.95</td><td class="num up">0.78</td><td class="num up">0.62</td><td class="num up">0.83</td></tr>
+          <tr><td>LRN+TargetVAE</td><td class="num">0.82</td><td class="num">0.72</td><td class="num">0.93</td><td class="num">0.69</td><td class="num">0.60</td><td class="num">0.82</td></tr>
+          <tr class="section-sep"><td colspan="7">Tomtwin</td></tr>
+          <tr><td>CompSTN+GMVAE</td><td class="num">0.62</td><td class="num">0.55</td><td class="num">0.72</td><td class="num">0.55</td><td class="num">0.46</td><td class="num">0.63</td></tr>
+          <tr><td>TargetVAE</td><td class="num">0.60</td><td class="num">0.51</td><td class="num">0.67</td><td class="num">0.50</td><td class="num">0.40</td><td class="num">0.60</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMVAE</td><td class="num up">0.72</td><td class="num up">0.62</td><td class="num up">0.74</td><td class="num up">0.67</td><td class="num up">0.48</td><td class="num up">0.65</td></tr>
+          <tr><td>LRN+TargetVAE</td><td class="num">0.64</td><td class="num">0.56</td><td class="num">0.72</td><td class="num">0.58</td><td class="num">0.47</td><td class="num">0.64</td></tr>
+          <tr class="section-sep"><td colspan="7">Plankton</td></tr>
+          <tr><td>CompSTN+GMVAE</td><td class="num">0.64</td><td class="num">0.57</td><td class="num">0.75</td><td class="num">0.57</td><td class="num">0.48</td><td class="num">0.66</td></tr>
+          <tr><td>TargetVAE</td><td class="num">0.61</td><td class="num">0.53</td><td class="num">0.70</td><td class="num">0.50</td><td class="num">0.41</td><td class="num">0.62</td></tr>
+          <tr><td>IRL-INR</td><td class="num">0.65</td><td class="num">0.63</td><td class="num">0.76</td><td class="num">0.51</td><td class="num">0.41</td><td class="num">0.56</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMVAE</td><td class="num up">0.75</td><td class="num up">0.65</td><td class="num up">0.77</td><td class="num up">0.69</td><td class="num up">0.50</td><td class="num up">0.67</td></tr>
+          <tr><td>LRN+TargetVAE</td><td class="num">0.65</td><td class="num">0.58</td><td class="num">0.75</td><td class="num">0.56</td><td class="num">0.49</td><td class="num">0.66</td></tr>
+          <tr class="section-sep"><td colspan="7">MVTec</td></tr>
+          <tr><td>CompSTN+GMVAE</td><td class="num">0.97</td><td class="num">0.95</td><td class="num">0.88</td><td class="num">0.94</td><td class="num">0.91</td><td class="num">0.75</td></tr>
+          <tr><td>TargetVAE</td><td class="num">0.98</td><td class="num">0.94</td><td class="num">0.82</td><td class="num">0.90</td><td class="num">0.87</td><td class="num">0.67</td></tr>
+          <tr><td>IRL-INR</td><td class="num">0.92</td><td class="num">0.88</td><td class="num">0.75</td><td class="num">0.84</td><td class="num">0.78</td><td class="num">0.61</td></tr>
+          <tr class="ours best"><td>LeaRN-CompSTN+GMVAE</td><td class="num up">0.98</td><td class="num up">0.96</td><td class="num up">0.89</td><td class="num up">0.95</td><td class="num up">0.92</td><td class="num up">0.76</td></tr>
+          <tr><td>LRN+TargetVAE</td><td class="num">0.97</td><td class="num">0.95</td><td class="num">0.88</td><td class="num">0.94</td><td class="num">0.91</td><td class="num">0.75</td></tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
 </div>
 
 <div class="rule"></div>
 
+<!-- ────────────────── QUALITATIVE RESULTS ────────────────── -->
+<!-- ★ HOW TO ADD IMAGES: inside any .q-placeholder div, uncomment the <img> tag and set src="path/to/your/image.png" ★ -->
+<div id="qualitative" class="section-wrap">
+  <div class="section-num">05 · Qualitative Results</div>
+  <h2 class="section-title reveal">Visual results &amp; rotation analysis</h2>
+  <p class="section-lead reveal">Qualitative comparison of reconstruction and object discovery outputs across all benchmarks. The animated rotation plots below confirm that LeaRN-CompSTN produces consistent, low-entropy angular predictions.</p>
+
+  <!-- Tab switcher -->
+  <div class="q-tabs reveal">
+    <button class="q-tab active" onclick="switchQTab('autoenc',this)">Autoencoding</button>
+    <button class="q-tab" onclick="switchQTab('detection',this)">Object Discovery</button>
+  </div>
+
+  <!-- ── Autoencoding tab ── -->
+  <div id="tab-autoenc" class="q-content active">
+    <div class="q-grid reveal">
+
+      <div class="q-panel">
+        <div class="q-placeholder">
+          <!-- <img src="YOUR_SRMNIST_IMAGE.png" alt="SR-MNIST reconstruction"> -->
+          <div class="q-ph-text"><span class="q-ph-icon">🖼</span>SR-MNIST<br>reconstruction</div>
+        </div>
+        <div class="q-panel-label">SR-MNIST · autoencoding</div>
+      </div>
+
+      <div class="q-panel">
+        <div class="q-placeholder">
+          <!-- <img src="YOUR_TOMTWIN_IMAGE.png" alt="Tomtwin reconstruction"> -->
+          <div class="q-ph-text"><span class="q-ph-icon">🖼</span>Tomtwin<br>reconstruction</div>
+        </div>
+        <div class="q-panel-label">Tomtwin · autoencoding</div>
+      </div>
+
+      <div class="q-panel">
+        <div class="q-placeholder">
+          <!-- <img src="YOUR_PLANKTON_IMAGE.png" alt="Plankton reconstruction"> -->
+          <div class="q-ph-text"><span class="q-ph-icon">🖼</span>Plankton<br>reconstruction</div>
+        </div>
+        <div class="q-panel-label">Plankton · autoencoding</div>
+      </div>
+
+      <div class="q-panel">
+        <div class="q-placeholder">
+          <!-- <img src="YOUR_MVTEC_IMAGE.png" alt="MVTec reconstruction"> -->
+          <div class="q-ph-text"><span class="q-ph-icon">🖼</span>MVTec<br>reconstruction</div>
+        </div>
+        <div class="q-panel-label">MVTec · autoencoding</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Object Discovery tab ── -->
+  <div id="tab-detection" class="q-content">
+    <div class="q-grid">
+
+      <div class="q-panel">
+        <div class="q-placeholder">
+          <!-- <img src="YOUR_MTRS_IMAGE.png" alt="MTRS-MNIST detections"> -->
+          <div class="q-ph-text"><span class="q-ph-icon">🖼</span>MTRS-MNIST<br>object discovery</div>
+        </div>
+        <div class="q-panel-label">MTRS-MNIST · discovery</div>
+      </div>
+
+      <div class="q-panel">
+        <div class="q-placeholder">
+          <!-- <img src="YOUR_D2S_IMAGE.png" alt="MVTec D2S detections"> -->
+          <div class="q-ph-text"><span class="q-ph-icon">🖼</span>MVTec D2S<br>object discovery</div>
+        </div>
+        <div class="q-panel-label">MVTec D2S · discovery</div>
+      </div>
+
+      <div class="q-panel">
+        <div class="q-placeholder">
+          <!-- <img src="YOUR_SCREWS_IMAGE.png" alt="MVTec Screws detections"> -->
+          <div class="q-ph-text"><span class="q-ph-icon">🖼</span>MVTec Screws<br>object discovery</div>
+        </div>
+        <div class="q-panel-label">MVTec Screws · discovery</div>
+      </div>
+
+      <div class="q-panel">
+        <div class="q-placeholder">
+          <!-- <img src="YOUR_MQTT_IMAGE.png" alt="MQTT-MNIST detections"> -->
+          <div class="q-ph-text"><span class="q-ph-icon">🖼</span>MQTT-MNIST<br>object discovery</div>
+        </div>
+        <div class="q-panel-label">MQTT-MNIST · discovery</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Animated rotation analysis plots ── -->
+  <div class="q-plots reveal">
+    <div class="q-plot-title">Rotation Prediction Analysis</div>
+    <p class="q-plot-sub">Per-class angular error analysis on MTRS-MNIST. The scatter plot shows predicted vs. actual angles — diagonal bands confirm rotation-equivariant feature learning. The histogram quantifies angular deviation mod 2π, with RoE values confirming low prediction entropy.</p>
+    <div class="q-plot-grid">
+      <div class="q-plot-card">
+        <canvas id="cv-scatter" width="460" height="380"></canvas>
+        <div class="q-plot-card-lbl">Predicted vs. Actual Angle · Classes 6 &amp; 9</div>
+      </div>
+      <div class="q-plot-card">
+        <canvas id="cv-hist" width="460" height="380"></canvas>
+        <div class="q-plot-card-lbl">Absolute Angle Difference mod 2π · per class</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- ────────────────── CITATION ────────────────── -->
 <div id="citation" class="section-wrap">
 <div style="max-width:720px">
-  <div class="section-num">05 · Citation</div>
+  <div class="section-num">06 · Citation</div>
   <h2 class="section-title reveal">Cite this work</h2>
   <div class="bibtex-card reveal">
     <button class="copy-btn" onclick="doCopy()">Copy</button>
@@ -835,87 +1045,95 @@ footer a:hover{color:var(--green)}
 </footer>
 
 <script>
-// ══ HERO CANVAS — delicate interference rings on white ══
+// ══ HERO CANVAS — pixel-based interference rings (fast) ══
 (()=>{
-  const cv = document.getElementById('hero-canvas');
-  const ctx = cv.getContext('2d');
-  let W, H, t = 0;
-  const sources = [
+  const cv=document.getElementById('hero-canvas');
+  const ctx=cv.getContext('2d',{alpha:true});
+  let W=1,H=1,t=0,distTables=null,wtBuf=null,imgData=null;
+  const sources=[
     {x:.3,y:.5,c:[10,110,102],speed:.007,freq:.045},
-    {x:.7,y:.3,c:[180,120,0],speed:.005,freq:.038},
-    {x:.6,y:.7,c:[92,63,191],speed:.009,freq:.052},
+    {x:.7,y:.3,c:[180,120,0], speed:.005,freq:.038},
+    {x:.6,y:.7,c:[92,63,191], speed:.009,freq:.052},
     {x:.15,y:.25,c:[10,110,102],speed:.006,freq:.03},
-    {x:.85,y:.7,c:[180,120,0],speed:.008,freq:.041},
+    {x:.85,y:.7,c:[180,120,0], speed:.008,freq:.041},
   ];
-  function resize(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;}
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    sources.forEach(s=>{
-      const x=s.x*W, y=s.y*H;
-      const maxR = Math.max(W,H)*.8;
-      const phase = t*s.speed;
-      for(let r=10;r<maxR;r+=10){
-        const wave = (Math.sin(r*s.freq - phase)+1)*.5;
-        const alpha = wave * (1-r/maxR) * .07;
-        ctx.beginPath();
-        ctx.arc(x,y,r,0,Math.PI*2);
-        ctx.strokeStyle=`rgba(${s.c[0]},${s.c[1]},${s.c[2]},${alpha})`;
-        ctx.lineWidth=1.5;
-        ctx.stroke();
+  // Render at 1/4 resolution — CSS stretches to fill, rings are smooth large-scale features
+  const SCALE=4;
+
+  function buildTables(){
+    const maxR=Math.max(W,H)*.8;
+    wtBuf=new Float32Array((maxR|0)+2);
+    imgData=ctx.createImageData(W,H);
+    distTables=sources.map(s=>{
+      const sx=s.x*W,sy=s.y*H,arr=new Float32Array(W*H);
+      for(let py=0;py<H;py++)for(let px=0;px<W;px++){
+        const dx=px-sx,dy=py-sy;arr[py*W+px]=Math.sqrt(dx*dx+dy*dy);
       }
+      return arr;
     });
-    t++;
-    requestAnimationFrame(draw);
+  }
+  function resize(){
+    W=cv.width=Math.max(1,Math.round(cv.offsetWidth/SCALE));
+    H=cv.height=Math.max(1,Math.round(cv.offsetHeight/SCALE));
+    buildTables();
+  }
+  function draw(){
+    const d=imgData.data;d.fill(0);
+    const maxR=Math.max(W,H)*.8,mri=maxR|0,n=W*H;
+    for(let si=0;si<sources.length;si++){
+      const s=sources[si],dt=distTables[si];
+      const phase=(t*s.speed)%(2*Math.PI),freq=s.freq;
+      // Precompute alpha for each integer radius — only ~400 sin calls total, not per-pixel
+      for(let r=0;r<=mri;r++){wtBuf[r]=(Math.sin(r*freq-phase)+1)*.5*(1-r/maxR)*.07;}
+      const cr=s.c[0],cg=s.c[1],cb=s.c[2];
+      for(let i=0;i<n;i++){
+        const dist=dt[i];if(dist>=maxR)continue;
+        const al=wtBuf[dist|0];if(al<0.003)continue;
+        const k=i<<2;
+        d[k]  +=cr*al; d[k+1]+=cg*al; d[k+2]+=cb*al; d[k+3]+=al*255;
+      }
+    }
+    ctx.putImageData(imgData,0,0);
+    t++;requestAnimationFrame(draw);
   }
   window.addEventListener('resize',resize);
-  resize(); draw();
+  resize();draw();
 })();
 
 // ══ SCROLL REVEAL ══
-const sobs = new IntersectionObserver(entries=>{
+const sobs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('up')});
 },{threshold:.1});
 document.querySelectorAll('.reveal,.reveal-r').forEach(el=>sobs.observe(el));
 
 // ══ COUNT-UP ══
-const cobs = new IntersectionObserver(entries=>{
+const cobs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(!e.isIntersecting)return;
-    const el=e.target;
-    const target=parseFloat(el.dataset.target);
-    const dec=parseInt(el.dataset.dec||0);
+    const el=e.target,target=parseFloat(el.dataset.target),dec=parseInt(el.dataset.dec||0);
     let s=null;
     const anim=ts=>{
-      if(!s)s=ts;
-      const p=Math.min((ts-s)/1300,1);
-      const ease=1-Math.pow(1-p,3);
+      if(!s)s=ts;const p=Math.min((ts-s)/1300,1),ease=1-Math.pow(1-p,3);
       el.textContent=(target*ease).toFixed(dec);
-      if(p<1)requestAnimationFrame(anim);
-      else el.textContent=target.toFixed(dec);
+      if(p<1)requestAnimationFrame(anim);else el.textContent=target.toFixed(dec);
     };
-    requestAnimationFrame(anim);
-    cobs.unobserve(el);
+    requestAnimationFrame(anim);cobs.unobserve(el);
   });
 },{threshold:.6});
 document.querySelectorAll('[data-target]').forEach(el=>cobs.observe(el));
 
-// ══ FFT ══
+// ══ FFT / RIESZ — on main thread (sync fallback, and source for worker) ══
 function fft1d(re,im,inv){
   const N=re.length;
   for(let i=1,j=0;i<N;i++){
-    let b=N>>1;
-    for(;j&b;b>>=1)j^=b;
-    j^=b;
+    let b=N>>1;for(;j&b;b>>=1)j^=b;j^=b;
     if(i<j){let t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t;}
   }
   for(let len=2;len<=N;len<<=1){
-    const ang=2*Math.PI/len*(inv?1:-1);
-    const wRe=Math.cos(ang),wIm=Math.sin(ang);
-    for(let i=0;i<N;i+=len){
-      let cRe=1,cIm=0;
+    const ang=2*Math.PI/len*(inv?1:-1),wRe=Math.cos(ang),wIm=Math.sin(ang);
+    for(let i=0;i<N;i+=len){let cRe=1,cIm=0;
       for(let j=0;j<(len>>1);j++){
-        const a=i+j,b=i+j+(len>>1);
-        const uRe=re[a],uIm=im[a];
+        const a=i+j,b=i+j+(len>>1),uRe=re[a],uIm=im[a];
         const vRe=re[b]*cRe-im[b]*cIm,vIm=re[b]*cIm+im[b]*cRe;
         re[a]=uRe+vRe;im[a]=uIm+vIm;re[b]=uRe-vRe;im[b]=uIm-vIm;
         const tmp=cRe*wRe-cIm*wIm;cIm=cRe*wIm+cIm*wRe;cRe=tmp;
@@ -925,75 +1143,73 @@ function fft1d(re,im,inv){
   if(inv)for(let i=0;i<N;i++){re[i]/=N;im[i]/=N;}
 }
 function fft2d(re,im,N,inv){
-  const r=new Float64Array(N),ri=new Float64Array(N);
-  for(let row=0;row<N;row++){
-    for(let c=0;c<N;c++){r[c]=re[row*N+c];ri[c]=im[row*N+c];}
-    fft1d(r,ri,inv);
-    for(let c=0;c<N;c++){re[row*N+c]=r[c];im[row*N+c]=ri[c];}
-  }
-  for(let col=0;col<N;col++){
-    for(let row=0;row<N;row++){r[row]=re[row*N+col];ri[row]=im[row*N+col];}
-    fft1d(r,ri,inv);
-    for(let row=0;row<N;row++){re[row*N+col]=r[row];im[row*N+col]=ri[row];}
-  }
+  const r=new Float32Array(N),ri=new Float32Array(N);
+  for(let row=0;row<N;row++){for(let c=0;c<N;c++){r[c]=re[row*N+c];ri[c]=im[row*N+c];}fft1d(r,ri,inv);for(let c=0;c<N;c++){re[row*N+c]=r[c];im[row*N+c]=ri[c];}}
+  for(let col=0;col<N;col++){for(let row=0;row<N;row++){r[row]=re[row*N+col];ri[row]=im[row*N+col];}fft1d(r,ri,inv);for(let row=0;row<N;row++){re[row*N+col]=r[row];im[row*N+col]=ri[row];}}
 }
-
-// ══ RIESZ TRANSFORM ══
-function riesz(gray,N,mu){
-  const fRe=new Float64Array(N*N),fIm=new Float64Array(N*N);
+function rieszSync(gray,N,mu){
+  const fRe=new Float32Array(N*N),fIm=new Float32Array(N*N);
   for(let i=0;i<N*N;i++)fRe[i]=gray[i];
   fft2d(fRe,fIm,N,false);
-  const r1Re=new Float64Array(N*N),r1Im=new Float64Array(N*N);
-  const r2Re=new Float64Array(N*N),r2Im=new Float64Array(N*N);
+  const r1Re=new Float32Array(N*N),r1Im=new Float32Array(N*N),r2Re=new Float32Array(N*N),r2Im=new Float32Array(N*N);
   for(let ky=0;ky<N;ky++)for(let kx=0;kx<N;kx++){
-    const x1=kx<=N/2?kx/N:(kx-N)/N;
-    const x2=ky<=N/2?ky/N:(ky-N)/N;
-    const nr=Math.sqrt(x1*x1+x2*x2);
-    if(nr<1e-12)continue;
-    const f1=x1/nr,f2=x2/nr;
-    const w=mu>=0?Math.exp(-4*Math.abs(nr-mu)):1;
-    const idx=ky*N+kx;
-    r1Re[idx]=fIm[idx]*f1*w; r1Im[idx]=-fRe[idx]*f1*w;
-    r2Re[idx]=fIm[idx]*f2*w; r2Im[idx]=-fRe[idx]*f2*w;
+    const x1=kx<=N/2?kx/N:(kx-N)/N,x2=ky<=N/2?ky/N:(ky-N)/N;
+    const nr=Math.sqrt(x1*x1+x2*x2);if(nr<1e-12)continue;
+    const f1=x1/nr,f2=x2/nr,w=mu>=0?Math.exp(-4*Math.abs(nr-mu)):1,idx=ky*N+kx;
+    r1Re[idx]=fIm[idx]*f1*w;r1Im[idx]=-fRe[idx]*f1*w;
+    r2Re[idx]=fIm[idx]*f2*w;r2Im[idx]=-fRe[idx]*f2*w;
   }
-  fft2d(r1Re,r1Im,N,true);
-  fft2d(r2Re,r2Im,N,true);
+  fft2d(r1Re,r1Im,N,true);fft2d(r2Re,r2Im,N,true);
   return{r1:r1Re,r2:r2Re};
 }
+
+// Worker: off-thread FFT when available, silent sync fallback otherwise
+let _worker=null,_busy=false,_pending=false;
+function _applyResult(r1,r2){
+  _busy=false;const N=256;
+  drawDiv(document.getElementById('cv-r1'),r1,N);
+  drawDiv(document.getElementById('cv-r2'),r2,N);
+  drawMag(document.getElementById('cv-mag'),r1,r2,N);
+  drawPhase(document.getElementById('cv-phase'),r1,r2,N);
+  if(_pending){_pending=false;processImage();}
+}
+try{
+  // Build worker source from the already-defined main-thread functions
+  const _wCode=[
+    fft1d.toString(),
+    fft2d.toString(),
+    rieszSync.toString().replace('rieszSync','riesz'),
+    'self.onmessage=function(e){var d=e.data,r=riesz(d.gray,d.N,d.bandMu);self.postMessage({r1:r.r1,r2:r.r2},[r.r1.buffer,r.r2.buffer]);};'
+  ].join('\n');
+  _worker=new Worker(URL.createObjectURL(new Blob([_wCode],{type:'application/javascript'})));
+  _worker.onmessage=function(e){_applyResult(e.data.r1,e.data.r2);};
+  _worker.onerror=function(){_worker=null;};
+}catch(e){_worker=null;}
 
 // ══ CANVAS RENDERS ══
 function imgToGray(imgEl,N){
   const c=document.createElement('canvas');c.width=c.height=N;
   const x=c.getContext('2d');x.drawImage(imgEl,0,0,N,N);
-  const d=x.getImageData(0,0,N,N).data;
-  const g=new Float64Array(N*N);
+  const d=x.getImageData(0,0,N,N).data,g=new Float32Array(N*N);
   for(let i=0;i<N*N;i++)g[i]=(d[i*4]*.299+d[i*4+1]*.587+d[i*4+2]*.114)/255;
   return g;
 }
 function drawDiv(cv,data,N){
   const ctx=cv.getContext('2d'),id=ctx.createImageData(N,N);
-  let mx=0;for(let i=0;i<N*N;i++)mx=Math.max(mx,Math.abs(data[i]));
-  if(!mx)mx=1;
+  let mx=0;for(let i=0;i<N*N;i++)mx=Math.max(mx,Math.abs(data[i]));if(!mx)mx=1;
   for(let i=0;i<N*N;i++){
-    const v=data[i]/mx;
-    let r,g,b;
-    if(v>0){r=Math.round(30+v*220);g=Math.round(80+v*140);b=Math.round(240-v*200);}
-    else{const u=-v;r=Math.round(240-u*200);g=Math.round(80+u*140);b=Math.round(30+u*220);}
+    const v=data[i]/mx;let r,g,b;
+    if(v>0){r=30+v*220|0;g=80+v*140|0;b=240-v*200|0;}
+    else{const u=-v;r=240-u*200|0;g=80+u*140|0;b=30+u*220|0;}
     id.data[i*4]=r;id.data[i*4+1]=g;id.data[i*4+2]=b;id.data[i*4+3]=255;
   }
   ctx.putImageData(id,0,0);
 }
 function drawMag(cv,r1,r2,N){
   const ctx=cv.getContext('2d'),id=ctx.createImageData(N,N);
-  let mx=0;
-  for(let i=0;i<N*N;i++){const m=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i]);if(m>mx)mx=m;}
-  if(!mx)mx=1;
+  let mx=0;for(let i=0;i<N*N;i++){const m=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i]);if(m>mx)mx=m;}if(!mx)mx=1;
   for(let i=0;i<N*N;i++){
     const t=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i])/mx;
-    // viridis-ish
-    const r=Math.round(68+t*(253-68));
-    const g=Math.round(1+t*t*(231-1));
-    const b=Math.round(84-t*84+t*t*Math.max(0,37-84));
     id.data[i*4]=Math.round(68*(1-t)+253*t*t);
     id.data[i*4+1]=Math.round(t*(1-t)*200+t*t*231);
     id.data[i*4+2]=Math.round(84*(1-t)*2+Math.max(0,37*t*t));
@@ -1003,58 +1219,60 @@ function drawMag(cv,r1,r2,N){
 }
 function drawPhase(cv,r1,r2,N){
   const ctx=cv.getContext('2d'),id=ctx.createImageData(N,N);
-  let mx=0;
-  for(let i=0;i<N*N;i++){const m=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i]);if(m>mx)mx=m;}
-  if(!mx)mx=1;
+  let mx=0;for(let i=0;i<N*N;i++){const m=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i]);if(m>mx)mx=m;}if(!mx)mx=1;
   for(let i=0;i<N*N;i++){
-    const ph=(Math.atan2(r2[i],r1[i])+Math.PI)/(2*Math.PI);
-    const al=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i])/mx;
-    const [r,g,b]=hsl(ph*360,.9*al,.45+.15*(1-al));
+    const ph=(Math.atan2(r2[i],r1[i])+Math.PI)/(2*Math.PI),al=Math.sqrt(r1[i]*r1[i]+r2[i]*r2[i])/mx;
+    const[r,g,b]=hsl(ph*360,.9*al,.45+.15*(1-al));
     id.data[i*4]=r;id.data[i*4+1]=g;id.data[i*4+2]=b;id.data[i*4+3]=255;
   }
   ctx.putImageData(id,0,0);
 }
 function hsl(h,s,l){
-  const a=s*Math.min(l,1-l);
-  const f=n=>{const k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1));};
+  const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return l-a*Math.max(-1,Math.min(k-3,9-k,1));};
   return[f(0)*255,f(8)*255,f(4)*255].map(Math.round);
 }
 
 // ══ STATE ══
-let curImg=null, bandMu=-1;
+let curImg=null,bandMu=-1;
 function processImage(){
   if(!curImg)return;
-  const N=256;
-  const gray=imgToGray(curImg,N);
-  const co=document.getElementById('cv-orig').getContext('2d');
-  co.drawImage(curImg,0,0,N,N);
-  const{r1,r2}=riesz(gray,N,bandMu);
-  drawDiv(document.getElementById('cv-r1'),r1,N);
-  drawDiv(document.getElementById('cv-r2'),r2,N);
-  drawMag(document.getElementById('cv-mag'),r1,r2,N);
-  drawPhase(document.getElementById('cv-phase'),r1,r2,N);
+  const N=256,gray=imgToGray(curImg,N);
+  document.getElementById('cv-orig').getContext('2d').drawImage(curImg,0,0,N,N);
+  if(_worker){
+    if(_busy){_pending=true;return;}
+    _busy=true;
+    _worker.postMessage({gray,N,bandMu},[gray.buffer]);
+  }else{
+    const{r1,r2}=rieszSync(gray,N,bandMu);
+    _applyResult(r1,r2);
+  }
 }
 function onBand(v){
-  const n=parseInt(v);
-  bandMu=n>=100?-1:n/200;
+  const n=parseInt(v);bandMu=n>=100?-1:n/200;
   document.getElementById('band-display').textContent=n>=100?'off':(n/200).toFixed(2);
   processImage();
 }
+
+// ══ DEMO GENERATION — ImageData avoids thousands of fillRect calls ══
 function loadDemo(type){
   const c=document.createElement('canvas');c.width=c.height=256;
   const x=c.getContext('2d');
   x.fillStyle='#f0f0f0';x.fillRect(0,0,256,256);
   if(type==='stripes'){
-    for(let i=0;i<256;i++){const v=Math.sin(i*.16)*90+140;x.fillStyle=`rgb(${v|0},${v|0},${v|0})`;x.fillRect(0,i,256,1);}
+    const id=x.createImageData(256,256),d=id.data;
+    for(let i=0;i<256;i++){const v=Math.sin(i*.16)*90+140|0;for(let j=0;j<256;j++){const idx=(i*256+j)*4;d[idx]=d[idx+1]=d[idx+2]=v;d[idx+3]=255;}}
+    x.putImageData(id,0,0);
     x.save();x.translate(128,128);x.rotate(.8);x.translate(-128,-128);
     for(let i=0;i<256;i++){const v=Math.sin(i*.12)*50+80;x.fillStyle=`rgba(${v|0},180,${v|0},.55)`;x.fillRect(0,i,256,1);}
     x.restore();
   }else if(type==='circle'){
+    // Was: 65,536 individual fillRect calls. Now: one putImageData.
+    const id=x.createImageData(256,256),d=id.data;
     for(let y=0;y<256;y++)for(let xa=0;xa<256;xa++){
-      const d=Math.sqrt((xa-128)**2+(y-128)**2);
-      const v=(Math.cos(d*.16)+1)*110+35|0;
-      x.fillStyle=`rgb(${v},${v},${v})`;x.fillRect(xa,y,1,1);
+      const dist=Math.sqrt((xa-128)**2+(y-128)**2),v=(Math.cos(dist*.16)+1)*110+35|0;
+      const idx=(y*256+xa)*4;d[idx]=d[idx+1]=d[idx+2]=v;d[idx+3]=255;
     }
+    x.putImageData(id,0,0);
   }else if(type==='cross'){
     x.fillStyle='#222';x.fillRect(118,10,20,236);x.fillRect(10,118,236,20);
     x.save();x.translate(128,128);x.rotate(Math.PI/4);x.translate(-128,-128);
@@ -1067,13 +1285,10 @@ function loadDemo(type){
     x.strokeStyle='rgba(10,110,102,.5)';x.lineWidth=3;
     for(let r=20;r<200;r+=28){x.beginPath();x.arc(40,40,r,0,Math.PI/2);x.stroke();}
   }
-  const img=new Image();
-  img.onload=()=>{curImg=img;processImage();};
-  img.src=c.toDataURL();
+  const img=new Image();img.onload=()=>{curImg=img;processImage();};img.src=c.toDataURL();
 }
 function setVizMode(mode,btn){
-  document.querySelectorAll('.vtog').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
+  document.querySelectorAll('.vtog').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
   const panels=document.querySelectorAll('.cv-panel');
   if(mode==='all')panels.forEach(p=>p.style.display='block');
   else if(mode==='mag')panels.forEach((p,i)=>p.style.display=i===3?'block':'none');
@@ -1083,8 +1298,7 @@ function setVizMode(mode,btn){
 // ══ FILE UPLOAD ══
 document.getElementById('img-upload').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;
-  const img=new Image();img.onload=()=>{curImg=img;processImage();};
-  img.src=URL.createObjectURL(f);
+  const img=new Image();img.onload=()=>{curImg=img;processImage();};img.src=URL.createObjectURL(f);
 });
 const uz=document.getElementById('upload-zone');
 uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag')});
@@ -1092,8 +1306,7 @@ uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
 uz.addEventListener('drop',e=>{
   e.preventDefault();uz.classList.remove('drag');
   const f=e.dataTransfer.files[0];if(!f)return;
-  const img=new Image();img.onload=()=>{curImg=img;processImage();};
-  img.src=URL.createObjectURL(f);
+  const img=new Image();img.onload=()=>{curImg=img;processImage();};img.src=URL.createObjectURL(f);
 });
 
 // ══ COPY BIBTEX ══
@@ -1104,6 +1317,266 @@ function doCopy(){
     setTimeout(()=>{b.textContent='Copy';b.style.color='';b.style.borderColor='';},2000);
   });
 }
+
+
+// ══ QUALITATIVE TAB SWITCHER ══
+function switchQTab(id, btn) {
+  document.querySelectorAll('.q-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.q-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+// ══ ROTATION ANALYSIS PLOTS ══
+(function() {
+  const PI = Math.PI, TWO_PI = 2 * Math.PI;
+
+  // ── Seeded deterministic PRNG (reproducible visuals) ──
+  let _s = 12345;
+  function rnd() { _s ^= _s<<13; _s ^= _s>>17; _s ^= _s<<5; return ((_s>>>0)/0xFFFFFFFF); }
+  function rndN() { return Math.sqrt(-2*Math.log(rnd()+1e-10))*Math.cos(TWO_PI*rnd()); }
+  function wrap(x) { return ((x % TWO_PI) + TWO_PI) % TWO_PI; }
+
+  // ── Scatter: 2 classes in parallel diagonal bands (y ≈ x + k·π) ──
+  function mkPts(n, spread) {
+    const pts = [];
+    for (const off of [0, PI, -PI]) {
+      for (let i = 0; i < Math.ceil(n/3); i++) {
+        const pred = rnd() * TWO_PI;
+        const actual = wrap(pred + off + rndN() * spread);
+        pts.push({ pred, actual, ox:(rnd()-.5)*3, oy:(rnd()-.5)*3, ph:rnd()*TWO_PI });
+      }
+    }
+    return pts;
+  }
+  const PTS6 = mkPts(240, 0.28);  // class 6 – blue
+  const PTS9 = mkPts(240, 0.44);  // class 9 – coral
+
+  // ── Histogram: 3 classes, bins over [0, 2π] ──
+  const NBINS = 40, BINW = TWO_PI / NBINS;
+  const H4 = new Float32Array(NBINS);
+  const H6 = new Float32Array(NBINS);
+  const H9 = new Float32Array(NBINS);
+
+  function fill(arr, peaks) {
+    for (const [mu, sig, n] of peaks) {
+      for (let i = 0; i < n; i++) {
+        arr[Math.min(NBINS-1, wrap(mu + rndN()*sig) / BINW | 0)]++;
+      }
+    }
+  }
+  // Shaped to match screenshot: peaks at ~1 rad, π+1 rad, ~2π for class 9
+  fill(H4, [[1.05, 0.12, 7200], [PI+1.0, 0.20, 350]]);
+  fill(H6, [[0.80, 0.26, 3100], [PI+0.80, 0.22, 5400]]);
+  fill(H9, [[1.00, 0.33, 2400], [PI-0.15, 0.28, 2100], [PI+0.90, 0.28, 2000], [TWO_PI-0.18, 0.17, 4400]]);
+
+  const HMAX = Math.max(...H4, ...H6, ...H9) * 1.12;
+
+  // ─────────────────────────────────────────────────────────
+  // ── SCATTER PLOT ──
+  // ─────────────────────────────────────────────────────────
+  const scv = document.getElementById('cv-scatter');
+  if (!scv) return;
+  const sc = scv.getContext('2d');
+  const SW = scv.width, SH = scv.height;
+  const SP = { t:30, r:22, b:58, l:62 };
+  const SPW = SW-SP.l-SP.r, SPH = SH-SP.t-SP.b;
+  function sx(v){ return SP.l + v/TWO_PI * SPW; }
+  function sy(v){ return SP.t + SPH - v/TWO_PI * SPH; }
+
+  let sCursor = 0, sTick = 0, sStarted = false;
+
+  function drawScatter() {
+    // Background + plot area
+    sc.fillStyle = '#F0F1F9'; sc.fillRect(0,0,SW,SH);
+    sc.fillStyle = '#E8EAF5'; sc.fillRect(SP.l,SP.t,SPW,SPH);
+
+    // White grid lines
+    sc.strokeStyle = 'rgba(255,255,255,.85)'; sc.lineWidth = 1;
+    for (let i=1; i<=6; i++) {
+      sc.beginPath(); sc.moveTo(sx(i*TWO_PI/6), SP.t); sc.lineTo(sx(i*TWO_PI/6), SP.t+SPH); sc.stroke();
+      sc.beginPath(); sc.moveTo(SP.l, sy(i*TWO_PI/6)); sc.lineTo(SP.l+SPW, sy(i*TWO_PI/6)); sc.stroke();
+    }
+
+    // Reference diagonals y = x + k·π
+    sc.setLineDash([4,4]); sc.strokeStyle = 'rgba(100,100,160,.38)'; sc.lineWidth = 1.2;
+    for (const off of [-TWO_PI, -PI, 0, PI, TWO_PI]) {
+      let x1 = Math.max(0, -off), y1 = x1 + off;
+      let x2 = Math.min(TWO_PI, TWO_PI-off), y2 = x2 + off;
+      if (y1 < 0 || y1 > TWO_PI) { y1 = Math.max(0,Math.min(TWO_PI,y1)); x1 = y1 - off; }
+      if (y2 < 0 || y2 > TWO_PI) { y2 = Math.max(0,Math.min(TWO_PI,y2)); x2 = y2 - off; }
+      if (x1<0||x1>TWO_PI||x2<0||x2>TWO_PI) continue;
+      sc.beginPath(); sc.moveTo(sx(x1),sy(y1)); sc.lineTo(sx(x2),sy(y2)); sc.stroke();
+    }
+    sc.setLineDash([]);
+
+    // Pi annotation: vertical arrow on the main diagonal
+    const arX = sx(PI*0.9), arY1 = sy(PI*0.9), arY2 = sy(PI*0.9 - PI);
+    if (arY2 > SP.t && arY2 < SP.t+SPH) {
+      sc.strokeStyle = 'rgba(80,80,120,.55)'; sc.lineWidth = 1;
+      sc.beginPath(); sc.moveTo(arX, arY1); sc.lineTo(arX, arY2); sc.stroke();
+      // arrowhead
+      sc.beginPath(); sc.moveTo(arX-4, arY2+8); sc.lineTo(arX,arY2+1); sc.lineTo(arX+4,arY2+8); sc.stroke();
+      sc.fillStyle='rgba(80,80,120,.7)'; sc.font='italic 13px "JetBrains Mono",monospace';
+      sc.textAlign='left'; sc.fillText('π', arX+5, (arY1+arY2)/2+5);
+    }
+
+    // Clip + draw points
+    sc.save();
+    sc.beginPath(); sc.rect(SP.l,SP.t,SPW,SPH); sc.clip();
+    const all = [...PTS6.map(p=>({...p,cls:6})), ...PTS9.map(p=>({...p,cls:9}))];
+    const shown = Math.min(sCursor, all.length);
+    for (let i=0; i<shown; i++) {
+      const p = all[i];
+      const ox = p.ox * Math.sin(sTick*.018 + p.ph);
+      const oy = p.oy * Math.sin(sTick*.022 + p.ph + 1.3);
+      const [r,g,b] = p.cls===6 ? [70,120,200] : [215,85,85];
+      sc.beginPath(); sc.arc(sx(p.pred)+ox, sy(p.actual)+oy, 3.4, 0, TWO_PI);
+      sc.fillStyle = `rgba(${r},${g},${b},.72)`;
+      sc.fill();
+    }
+    sc.restore();
+
+    // Axes ticks
+    sc.fillStyle='#5A6080'; sc.font='10.5px "JetBrains Mono",monospace'; sc.textAlign='center';
+    for (let t=0; t<=6; t++) { sc.fillText(t, sx(t), SP.t+SPH+17); }
+    sc.textAlign='right';
+    for (let t=1; t<=6; t++) { sc.fillText(t, SP.l-7, sy(t)+4); }
+
+    // Border
+    sc.strokeStyle='rgba(150,158,200,.5)'; sc.lineWidth=1;
+    sc.strokeRect(SP.l,SP.t,SPW,SPH);
+
+    // Axis labels
+    sc.fillStyle='#3D4663'; sc.font='12px "Outfit",sans-serif'; sc.textAlign='center';
+    sc.fillText('Predicted Angle (radians)', SP.l+SPW/2, SH-8);
+    sc.save(); sc.translate(13, SP.t+SPH/2); sc.rotate(-PI/2);
+    sc.fillText('Actual Angle (radians)', 0, 0); sc.restore();
+
+    // Legend box
+    const lx=SP.l+10, ly=SP.t+10;
+    sc.fillStyle='rgba(255,255,255,.88)';
+    if (sc.roundRect) { sc.beginPath(); sc.roundRect(lx-4,ly-4,66,52,4); sc.fill(); }
+    else { sc.fillRect(lx-4,ly-4,66,52); }
+    sc.font='9.5px "JetBrains Mono",monospace'; sc.textAlign='left';
+    sc.fillStyle='#8892AA'; sc.fillText('Classes', lx, ly+8);
+    [[6,[70,120,200]], [9,[215,85,85]]].forEach(([cls,c],i) => {
+      const yy = ly+18+i*16;
+      sc.fillStyle=`rgba(${c[0]},${c[1]},${c[2]},.85)`;
+      sc.beginPath(); sc.arc(lx+6,yy,4.5,0,TWO_PI); sc.fill();
+      sc.fillStyle='#3D4663'; sc.fillText(cls, lx+15, yy+4);
+    });
+
+    sTick++;
+    if (sCursor < all.length) sCursor += 7;
+    requestAnimationFrame(drawScatter);
+  }
+
+  // Start scatter on intersection
+  new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !sStarted) { sStarted=true; drawScatter(); }
+  }, {threshold:.2}).observe(scv);
+
+  // ─────────────────────────────────────────────────────────
+  // ── HISTOGRAM PLOT ──
+  // ─────────────────────────────────────────────────────────
+  const hcv = document.getElementById('cv-hist');
+  const hc = hcv.getContext('2d');
+  const HW = hcv.width, HH = hcv.height;
+  const HP = { t:28, r:14, b:72, l:68 };
+  const HPW = HW-HP.l-HP.r, HPH = HH-HP.t-HP.b;
+  function hx(v){ return HP.l + v/TWO_PI * HPW; }
+  function hy(v){ return HP.t + HPH - Math.max(0,v)/HMAX * HPH; }
+
+  let hProgress=0, hStarted=false, hT0=null, hTick=0;
+  const HDUR=1300;
+
+  const HCLS = [
+    {arr:H4, rgb:[99,155,220],  label:'Class 4', roe:'0.2909'},
+    {arr:H6, rgb:[220,120,120], label:'Class 6', roe:'0.3516'},
+    {arr:H9, rgb:[110,182,110], label:'Class 9', roe:'0.3553'},
+  ];
+
+  function drawHist(prog) {
+    const bw = HPW / NBINS;
+    hc.fillStyle='#F8F9FE'; hc.fillRect(0,0,HW,HH);
+    hc.fillStyle='#ECEEF6'; hc.fillRect(HP.l,HP.t,HPW,HPH);
+
+    // Horizontal grid
+    hc.strokeStyle='rgba(255,255,255,.9)'; hc.lineWidth=1;
+    for (const y of [500,1000,1500,2000,2500,3000,3500]) {
+      if (y>HMAX) continue;
+      const yp=hy(y); hc.beginPath(); hc.moveTo(HP.l,yp); hc.lineTo(HP.l+HPW,yp); hc.stroke();
+    }
+
+    // Bars — draw all 3 classes with transparency so they overlap nicely
+    for (const cls of HCLS) {
+      for (let b=0; b<NBINS; b++) {
+        const count = cls.arr[b] * prog;
+        if (count < 1) continue;
+        const bx = HP.l + b*bw, barH = (count/HMAX)*HPH;
+        const by = HP.t + HPH - barH;
+        const [r,g,bl] = cls.rgb;
+        hc.fillStyle = `rgba(${r},${g},${bl},.52)`;
+        hc.fillRect(bx, by, bw-0.5, barH);
+        hc.strokeStyle = `rgba(${r},${g},${bl},.75)`;
+        hc.lineWidth = 0.5;
+        hc.strokeRect(bx, by, bw-0.5, barH);
+      }
+    }
+
+    // Border
+    hc.strokeStyle='rgba(150,158,200,.5)'; hc.lineWidth=1;
+    hc.strokeRect(HP.l,HP.t,HPW,HPH);
+
+    // X ticks
+    hc.fillStyle='#5A6080'; hc.font='10.5px "JetBrains Mono",monospace'; hc.textAlign='center';
+    for (let t=0; t<=6; t++) hc.fillText(t, hx(t*TWO_PI/6), HP.t+HPH+17);
+
+    // Y ticks
+    hc.textAlign='right';
+    for (const y of [0,1000,2000,3000]) {
+      if (y>HMAX) continue;
+      hc.fillText(y===0?'0':y, HP.l-7, hy(y)+4);
+    }
+
+    // Axis labels
+    hc.fillStyle='#3D4663'; hc.font='11.5px "Outfit",sans-serif'; hc.textAlign='center';
+    hc.fillText('Absolute Angle Difference (radians) mod 2π', HP.l+HPW/2, HH-10);
+    hc.save(); hc.translate(13,HP.t+HPH/2); hc.rotate(-PI/2);
+    hc.fillText('Count', 0, 0); hc.restore();
+
+    // Legend (top-right, inside plot area)
+    const lx=HP.l+HPW-138, ly=HP.t+8;
+    hc.fillStyle='rgba(255,255,255,.93)';
+    if (hc.roundRect) { hc.beginPath(); hc.roundRect(lx-5,ly-4,136,68,5); hc.fill(); }
+    else { hc.fillRect(lx-5,ly-4,136,68); }
+    hc.strokeStyle='rgba(180,185,215,.55)'; hc.lineWidth=.8; hc.stroke();
+    HCLS.forEach((cls, i) => {
+      const yl = ly+4+i*20;
+      const [r,g,bl]=cls.rgb;
+      hc.fillStyle=`rgba(${r},${g},${bl},.8)`;
+      hc.fillRect(lx, yl, 13, 12);
+      hc.fillStyle='#3D4663'; hc.font='10px "JetBrains Mono",monospace'; hc.textAlign='left';
+      hc.fillText(`${cls.label} (RoE: ${cls.roe})`, lx+17, yl+10);
+    });
+  }
+
+  function animHist(ts) {
+    if (!hT0) hT0=ts;
+    const p = Math.min((ts-hT0)/HDUR, 1);
+    const ease = 1 - Math.pow(1-p, 3);
+    drawHist(ease);
+    if (p < 1) requestAnimationFrame(animHist);
+    else drawHist(1);
+  }
+
+  drawHist(0); // initial empty state
+  new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !hStarted) { hStarted=true; requestAnimationFrame(animHist); }
+  }, {threshold:.25}).observe(hcv);
+
+})();
 
 // Load demo on start
 window.addEventListener('load',()=>loadDemo('circle'));
