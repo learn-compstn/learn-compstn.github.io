@@ -910,6 +910,22 @@ footer a:hover{color:var(--green)}
 <div class="rule"></div>
 
 
+  <!-- ── Animated rotation analysis plots ── -->
+  <div class="q-plots reveal">
+    <div class="q-plot-title">Rotation Prediction Analysis</div>
+    <p class="q-plot-sub">Per-class angular error analysis on MTRS-MNIST. The scatter plot shows predicted vs. actual angles — diagonal bands confirm rotation-equivariant feature learning. The histogram quantifies angular deviation mod 2π, with RoE values confirming low prediction entropy.</p>
+    <div class="q-plot-grid">
+      <div class="q-plot-card">
+        <canvas id="cv-scatter" width="460" height="380"></canvas>
+        <div class="q-plot-card-lbl">Predicted vs. Actual Angle · Classes 6 &amp; 9</div>
+      </div>
+      <div class="q-plot-card">
+        <canvas id="cv-hist" width="460" height="380"></canvas>
+        <div class="q-plot-card-lbl">Absolute Angle Difference mod 2π · per class</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- ────────────────── CITATION ────────────────── -->
